@@ -6,7 +6,7 @@
   - type: Sprite
     sprite: Objects/Specific/Medical/medical.rsi
   - type: Item
-    size: 10
+    size: Small
     sprite: Objects/Specific/Medical/medical.rsi
     heldPrefix: ointment
   # Inherited
@@ -44,7 +44,7 @@
     stackType: Ointment
     count: 10
   - type: StackPrice
-    price: 10
+    price: 5
 
 - type: entity
   id: Ointment1
@@ -54,8 +54,6 @@
   - type: Stack
     stackType: Ointment
     count: 1
-  - type: Item
-    size: 1
 
 - type: entity
   id: Ointment10Lingering
@@ -71,6 +69,7 @@
   description: Used to treat even the nastiest burns. Also effective against caustic burns.
   parent: BaseHealingItem
   id: RegenerativeMesh
+  suffix: Full
   components:
   - type: Tag
     tags:
@@ -101,12 +100,11 @@
 - type: entity
   id: OintmentAdvanced1
   parent: RegenerativeMesh
+  suffix: Single
   components:
   - type: Stack
     stackType: RegenerativeMesh
     count: 1
-  - type: Item
-    size: 1
 
 - type: entity
   name: bruise pack
@@ -134,7 +132,7 @@
     stackType: Brutepack
     count: 10
   - type: StackPrice
-    price: 10
+    price: 5
 
 - type: entity
   id: Brutepack1
@@ -144,8 +142,6 @@
   - type: Stack
     stackType: Brutepack
     count: 1
-  - type: Item
-    size: 1
 
 - type: entity
   id: Brutepack10Lingering
@@ -161,6 +157,7 @@
   description: A suture soaked in medicine, treats blunt-force trauma effectively and closes wounds.
   parent: BaseHealingItem
   id: MedicatedSuture
+  suffix: Full
   components:
   - type: Tag
     tags:
@@ -189,12 +186,11 @@
 - type: entity
   id: BrutepackAdvanced1
   parent: MedicatedSuture
+  suffix: Single
   components:
   - type: Stack
     stackType: MedicatedSuture
     count: 1
-  - type: Item
-    size: 1
 
 - type: entity
   name: blood pack
@@ -232,6 +228,31 @@
   components:
   - type: Stack
     lingering: true
+- type: entity
+  parent: BaseHealingItem
+  id: Tourniquet
+  name: tourniquet
+  description: Stops bleeding! Hopefully.
+  components:
+    - type: Tag
+      tags:
+        - SecBeltEquip
+    - type: Sprite
+      state: tourniquet
+    - type: Healing
+      damageContainers:
+        - Biological
+      damage:
+        groups:
+          Brute: 5 # Tourniquets HURT!
+        types:
+          Asphyxiation: 5 # Essentially Stopping all blood reaching a part of your body
+      bloodlossModifier: -10 # Tourniquets stop bleeding
+      delay: 0.5
+      healingBeginSound:
+        path: "/Audio/Items/Medical/brutepack_begin.ogg"
+      healingEndSound:
+        path: "/Audio/Items/Medical/brutepack_end.ogg"
 
 - type: entity
   name: roll of gauze
@@ -273,8 +294,6 @@
   components:
   - type: Stack
     count: 1
-  - type: Item
-    size: 1
 
 - type: entity
   id: Gauze10Lingering
@@ -303,7 +322,7 @@
   id: HealingToolbox
   name: healing toolbox
   description: A powerful toolbox imbued with robust energy. It can heal your wounds and fill you with murderous intent.
-  suffix: Do Not Map
+  suffix: DO NOT MAP
   components:
   - type: Sprite
     sprite: Objects/Specific/Medical/healing_toolbox.rsi

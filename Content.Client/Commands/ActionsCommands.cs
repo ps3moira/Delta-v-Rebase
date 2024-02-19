@@ -1,7 +1,10 @@
-﻿using Content.Client.Actions;
+using System.IO;
+using Content.Client.Actions;
 using Content.Client.Mapping;
 using Content.Shared.Administration;
+using Robust.Client.UserInterface;
 using Robust.Shared.Console;
+using YamlDotNet.RepresentationModel;
 
 namespace Content.Client.Commands;
 
@@ -12,11 +15,8 @@ namespace Content.Client.Commands;
 public sealed class SaveActionsCommand : IConsoleCommand
 {
     public string Command => "saveacts";
-
     public string Description => "Saves the current action toolbar assignments to a file";
-
     public string Help => $"Usage: {Command} <user resource path>";
-
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (args.Length != 1)
@@ -37,52 +37,74 @@ public sealed class SaveActionsCommand : IConsoleCommand
 }
 */
 
-[AnyCommand]
-public sealed class LoadActionsCommand : IConsoleCommand
+// [AnyCommand] DeltaV - Disable AnyCommand, require at least admin rank
+public sealed class LoadActionsCommand : LocalizedCommands
 {
-    public string Command => "loadacts";
+    [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
 
-    public string Description => "Loads action toolbar assignments from a user-file.";
+    public override string Command => "loadacts";
 
-    public string Help => $"Usage: {Command} <user resource path>";
+    public override string Help => LocalizationManager.GetString($"cmd-{Command}-help", ("command", Command));
 
-    public void Execute(IConsoleShell shell, string argStr, string[] args)
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (args.Length != 1)
         {
-            shell.WriteLine(Help);
+            LoadActs(); // DeltaV - Load from a file dialogue instead
             return;
         }
 
         try
         {
-            EntitySystem.Get<ActionsSystem>().LoadActionAssignments(args[0], true);
+            _entitySystemManager.GetEntitySystem<ActionsSystem>().LoadActionAssignments(args[0], true);
         }
         catch
         {
-            shell.WriteLine("Failed to load action assignments");
+            shell.WriteError(LocalizationManager.GetString($"cmd-{Command}-error"));
         }
+    }
+
+    /// <summary>
+    /// DeltaV - Load actions from a file stream instead
+    /// </summary>
+    private static async void LoadActs()
+    {
+        var fileMan = IoCManager.Resolve<IFileDialogManager>();
+        var actMan = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<ActionsSystem>();
+
+        var stream = await fileMan.OpenFile(new FileDialogFilters(new FileDialogFilters.Group("yml")));
+        if (stream is null)
+            return;
+
+        var reader = new StreamReader(stream);
+        var yamlStream = new YamlStream();
+        yamlStream.Load(reader);
+
+        actMan.LoadActionAssignments(yamlStream);
+        reader.Close();
     }
 }
 
-[AnyCommand]
-public sealed class LoadMappingActionsCommand : IConsoleCommand
+// [AnyCommand] DeltaV - Disable AnyCommand, require at least admin rank
+public sealed class LoadMappingActionsCommand : LocalizedCommands
 {
-    public string Command => "loadmapacts";
+    [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
 
-    public string Description => "Loads the mapping preset action toolbar assignments.";
+    public const string CommandName = "loadmapacts";
 
-    public string Help => $"Usage: {Command}";
+    public override string Command => CommandName;
 
-    public void Execute(IConsoleShell shell, string argStr, string[] args)
+    public override string Help => LocalizationManager.GetString($"cmd-{Command}-help", ("command", Command));
+
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         try
         {
-            EntitySystem.Get<MappingSystem>().LoadMappingActions();
+            _entitySystemManager.GetEntitySystem<MappingSystem>().LoadMappingActions();
         }
         catch
         {
-            shell.WriteLine("Failed to load action assignments");
+            shell.WriteError(LocalizationManager.GetString($"cmd-{Command}-error"));
         }
     }
 }

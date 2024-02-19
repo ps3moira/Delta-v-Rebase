@@ -28,7 +28,6 @@
     - resetent
     - resetallents
     - cvar
-    - fuckrules
     - midipanic
     - replay_recording_start
     - replay_recording_stop
@@ -40,6 +39,7 @@
     - replay_set_time
     - replay_stop
     - replay_load
+    - saveconfig
 
 - Flags: DEBUG
   Commands:
@@ -53,7 +53,7 @@
     - hidemechanisms
     - showmechanisms
     - menuvis
-    - togglehealthoverlay
+    - showhealthbars
     - toggledecals
     - nodevis
     - nodevisfilter
@@ -72,6 +72,7 @@
     - detachent
     - localdelete
     - fullstatereset
+    - fuckrules
 
 - Flags: MAPPING
   Commands:
