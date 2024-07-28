@@ -6,16 +6,16 @@
   - type: StorageFill
     contents:
       - id: ClothingOuterHardsuitSpatio
-      - id: YellowOxygenTankFilled
-      - id: NitrogenTankFilled
       - id: ClothingShoesBootsMag
       - id: ClothingMaskGasExplorer
-# Currently do not function as 'true' mesons, so they're useless for salvagers.
-#      - id: ClothingEyesGlassesMeson
       - id: ClothingBeltUtilityFilled
       - id: SurvivalKnife
       - id: HandheldGPSBasic
       - id: RadioHandheld
+      - id: SeismicCharge
+        amount: 2
+      - id: ClothingShoesBootsWinterMiner #Delta V: Add departmental winter boots
+      - id: JetpackMiniFilled # DeltaV - Salv lost their shuttle
       - id: OreBag
         prob: 0.5
       - id: Flare
@@ -23,6 +23,10 @@
       - id: Flare
         prob: 0.3
       - id: Flare
+        prob: 0.3
+      - id: ClothingNeckSalvager # DeltaV - salvage cloak
+        prob: 0.2
+      - id: LunchboxLogisticsFilledRandom # DeltaV - Lunchboxes!
         prob: 0.3
 
 - type: entity
@@ -38,6 +42,10 @@
       - id: SurvivalKnife
       - id: HandheldGPSBasic
       - id: RadioHandheld
+      - id: SeismicCharge
+        amount: 2
+      - id: ClothingShoesBootsWinterMiner #Delta V: Add departmental winter boots
+      - id: JetpackMiniFilled # DeltaV - Salv lost their shuttle
       - id: OreBag
         prob: 0.5
       - id: Flare
@@ -45,4 +53,8 @@
       - id: Flare
         prob: 0.3
       - id: Flare
+        prob: 0.3
+      - id: ClothingNeckSalvager # DeltaV - salvage cloak
+        prob: 0.2
+      - id: LunchboxLogisticsFilledRandom # DeltaV - Lunchboxes!
         prob: 0.3

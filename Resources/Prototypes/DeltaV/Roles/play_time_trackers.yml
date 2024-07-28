@@ -1,2 +1,20 @@
 - type: playTimeTracker
   id: JobBrigmedic
+
+- type: playTimeTracker
+  id: JobMedicalBorg
+
+- type: playTimeTracker
+  id: JobChiefJustice
+
+- type: playTimeTracker
+  id: JobClerk
+
+- type: playTimeTracker
+  id: JobProsecutor
+
+- type: playTimeTracker
+  id: JobCourier
+
+- type: playTimeTracker
+  id: JobSecurityBorg

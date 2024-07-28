@@ -67,8 +67,8 @@
   - type: InventorySlots
   - type: UserInterface
     interfaces:
-    - key: enum.StrippingUiKey.Key
-      type: StrippableBoundUserInterface
+      enum.StrippingUiKey.Key:
+        type: StrippableBoundUserInterface
   - type: DamageStateVisuals
     states:
       Alive:
@@ -106,6 +106,8 @@
     - Meat
     - FootstepSound
     - Radio
+  - type: Puller
+    needsHands: False
   - type: NoSlip
   - type: Respirator #It just works?
     minSaturation: 5.0
@@ -141,7 +143,7 @@
   - type: Bloodstream
     bloodMaxVolume: 60
   - type: CanEscapeInventory
-    BaseResistTime: 3
+    baseResistTime: 3
   - type: MobPrice
     price: 250 # Their suits, while tiny, go for quite a bit on the market
   - type: IntrinsicRadioReceiver

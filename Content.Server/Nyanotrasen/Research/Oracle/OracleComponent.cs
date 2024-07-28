@@ -1,4 +1,6 @@
+using Content.Shared.Chemistry.Reagent;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
 
 namespace Content.Server.Research.Oracle;
 
@@ -21,14 +23,20 @@ public sealed partial class OracleComponent : Component
     [DataField("barkTime")]
     public TimeSpan BarkTime = TimeSpan.FromMinutes(1);
 
+    [DataField("rejectAccumulator")]
+    public float RejectAccumulator;
+
+    [DataField("rejectTime")]
+    public TimeSpan RejectTime = TimeSpan.FromSeconds(5);
+
     [ViewVariables(VVAccess.ReadWrite)]
     public EntityPrototype DesiredPrototype = default!;
 
     [ViewVariables(VVAccess.ReadWrite)]
     public EntityPrototype? LastDesiredPrototype = default!;
 
-    [DataField("rewardReagents")]
-    public static IReadOnlyList<string> RewardReagents = new[]
+    [DataField("rewardReagents", customTypeSerializer: typeof(PrototypeIdListSerializer<ReagentPrototype>))]
+    public IReadOnlyList<string> RewardReagents = new[]
     {
         "LotophagoiOil", "LotophagoiOil", "LotophagoiOil", "LotophagoiOil", "LotophagoiOil", "Wine", "Blood", "Ichor"
     };

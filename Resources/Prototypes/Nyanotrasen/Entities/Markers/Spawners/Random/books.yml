@@ -2,12 +2,15 @@
   parent: MarkerBase
   id: RandomBook
   name: random book spawner
+  placement:
+    mode: PlaceFree # want to be able to free place books for stacks, etc.
   components:
+  - type: Transform
+    anchored: false
   - type: Sprite
     layers:
-      - state: red
       - sprite: Objects/Misc/books.rsi
-        state: book6
+        state: cover_base
   - type: RandomSpawner
     offset: 0
     prototypes:
@@ -42,11 +45,12 @@
       - BookMap
       - BookJourney
       - BookInspiration
+      - BookJanitorTale
       # Guidebook Books
       - BookSpaceEncyclopedia
       - BookTheBookOfControl
       - BookBartendersManual
-      - BookChefGaming
+      - BookHowToCookForFortySpaceman
       - BookLeafLoversSecret
       - BookEngineersHandbook
       - BookScientistsGuidebook
@@ -56,20 +60,20 @@
       - BookMedicalReferenceBook
       - BookHowToSurvive
       - BookChemicalCompendium
-      # Other Books
-      - BookEscalation
-      - BookEscalationSecurity
       - BookAtmosDistro
       - BookAtmosWaste
       - BookAtmosAirAlarms
       - BookAtmosVentsMore
+      # Other Books
       - BookRandom # The empty random book because why not
+      - BookRandomStory
     chance: 0.9
     rarePrototypes:
-      - BookChemistryInsane
-      - BookBotanicalTextbook
-      - BookGnominomicon
-      - BookFishing
-      - BookDetective
-      - BookSalvageEpistemics1 # Nyanotrasen - Epistemic Lore Book
+#      - BookChemistryInsane
+#      - BookBotanicalTextbook
+#      - BookGnominomicon
+#      - BookFishing
+      - BookFishops # DeltaV - fishops book
+#      - BookDetective
+#      - BookSalvageEpistemics1 # Nyanotrasen - Epistemic Lore Book
     rareChance: 0.25

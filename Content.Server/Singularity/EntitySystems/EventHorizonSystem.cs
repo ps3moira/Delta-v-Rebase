@@ -42,7 +42,6 @@ public sealed class EventHorizonSystem : SharedEventHorizonSystem
         SubscribeLocalEvent<TelegnosticProjectionComponent, EventHorizonAttemptConsumeEntityEvent>(PreventConsume); ///Nyano - Summary: the telegnositic projection has the same trait as ghosts. 
         SubscribeLocalEvent<StationDataComponent, EventHorizonAttemptConsumeEntityEvent>(PreventConsume);
         SubscribeLocalEvent<EventHorizonComponent, MapInitEvent>(OnHorizonMapInit);
-        SubscribeLocalEvent<EventHorizonComponent, EntityUnpausedEvent>(OnHorizonUnpaused);
         SubscribeLocalEvent<EventHorizonComponent, StartCollideEvent>(OnStartCollide);
         SubscribeLocalEvent<EventHorizonComponent, EntGotInsertedIntoContainerMessage>(OnEventHorizonContained);
         SubscribeLocalEvent<EventHorizonContainedEvent>(OnEventHorizonContained);
@@ -57,11 +56,6 @@ public sealed class EventHorizonSystem : SharedEventHorizonSystem
     private void OnHorizonMapInit(EntityUid uid, EventHorizonComponent component, MapInitEvent args)
     {
         component.NextConsumeWaveTime = _timing.CurTime;
-    }
-
-    private void OnHorizonUnpaused(EntityUid uid, EventHorizonComponent component, ref EntityUnpausedEvent args)
-    {
-        component.NextConsumeWaveTime += args.PausedTime;
     }
 
     public override void Shutdown()
@@ -124,10 +118,12 @@ public sealed class EventHorizonSystem : SharedEventHorizonSystem
     /// </summary>
     public void ConsumeEntity(EntityUid hungry, EntityUid morsel, EventHorizonComponent eventHorizon, BaseContainer? outerContainer = null)
     {
-        if (!EntityManager.IsQueuedForDeletion(morsel) // I saw it log twice a few times for some reason?
-        && (HasComp<MindContainerComponent>(morsel)
+        if (EntityManager.IsQueuedForDeletion(morsel)) // already handled, and we're substepping
+            return;
+
+        if (HasComp<MindContainerComponent>(morsel)
             || _tagSystem.HasTag(morsel, "HighRiskItem")
-            || HasComp<ContainmentFieldGeneratorComponent>(morsel)))
+            || HasComp<ContainmentFieldGeneratorComponent>(morsel))
         {
             _adminLogger.Add(LogType.EntityDelete, LogImpact.Extreme, $"{ToPrettyString(morsel)} entered the event horizon of {ToPrettyString(hungry)} and was deleted");
         }
@@ -173,7 +169,7 @@ public sealed class EventHorizonSystem : SharedEventHorizonSystem
         var range2 = range * range;
         var xformQuery = EntityManager.GetEntityQuery<TransformComponent>();
         var epicenter = _xformSystem.GetWorldPosition(xform, xformQuery);
-        foreach (var entity in _lookup.GetEntitiesInRange(xform.MapPosition, range, flags: LookupFlags.Uncontained))
+        foreach (var entity in _lookup.GetEntitiesInRange(_xformSystem.GetMapCoordinates(uid, xform), range, flags: LookupFlags.Uncontained))
         {
             if (entity == uid)
                 continue;
@@ -217,7 +213,7 @@ public sealed class EventHorizonSystem : SharedEventHorizonSystem
             var target_container = outerContainer;
             while (target_container != null)
             {
-                if (target_container.Insert(entity))
+                if (_containerSystem.Insert(entity, target_container))
                     break;
 
                 _containerSystem.TryGetContainingContainer(target_container.Owner, out target_container);
@@ -238,7 +234,7 @@ public sealed class EventHorizonSystem : SharedEventHorizonSystem
     /// </summary>
     public void ConsumeTile(EntityUid hungry, TileRef tile, EventHorizonComponent eventHorizon)
     {
-        ConsumeTiles(hungry, new List<(Vector2i, Tile)>(new[] { (tile.GridIndices, Tile.Empty) }), tile.GridUid, _mapMan.GetGrid(tile.GridUid), eventHorizon);
+        ConsumeTiles(hungry, new List<(Vector2i, Tile)>(new[] { (tile.GridIndices, Tile.Empty) }), tile.GridUid, Comp<MapGridComponent>(tile.GridUid), eventHorizon);
     }
 
     /// <summary>
@@ -246,7 +242,7 @@ public sealed class EventHorizonSystem : SharedEventHorizonSystem
     /// </summary>
     public void AttemptConsumeTile(EntityUid hungry, TileRef tile, EventHorizonComponent eventHorizon)
     {
-        AttemptConsumeTiles(hungry, new TileRef[1] { tile }, tile.GridUid, _mapMan.GetGrid(tile.GridUid), eventHorizon);
+        AttemptConsumeTiles(hungry, new TileRef[1] { tile }, tile.GridUid, Comp<MapGridComponent>(tile.GridUid), eventHorizon);
     }
 
     /// <summary>
@@ -303,7 +299,7 @@ public sealed class EventHorizonSystem : SharedEventHorizonSystem
         if (!Resolve(uid, ref xform) || !Resolve(uid, ref eventHorizon))
             return;
 
-        var mapPos = xform.MapPosition;
+        var mapPos = _xformSystem.GetMapCoordinates(uid, xform: xform);
         var box = Box2.CenteredAround(mapPos.Position, new Vector2(range, range));
         var circle = new Circle(mapPos.Position, range);
         var grids = new List<Entity<MapGridComponent>>();
@@ -327,8 +323,10 @@ public sealed class EventHorizonSystem : SharedEventHorizonSystem
         if (!Resolve(uid, ref xform, ref eventHorizon))
             return;
 
-        ConsumeEntitiesInRange(uid, range, xform, eventHorizon);
-        ConsumeTilesInRange(uid, range, xform, eventHorizon);
+        if (eventHorizon.ConsumeEntities)
+            ConsumeEntitiesInRange(uid, range, xform, eventHorizon);
+        if (eventHorizon.ConsumeTiles)
+            ConsumeTilesInRange(uid, range, xform, eventHorizon);
     }
 
     #endregion Consume

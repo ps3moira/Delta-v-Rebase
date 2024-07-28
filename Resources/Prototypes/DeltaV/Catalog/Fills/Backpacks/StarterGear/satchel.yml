@@ -1,11 +1,21 @@
 - type: entity
   noSpawn: true
   parent: ClothingBackpackSatchelMedical
-  id: ClothingBackpackSatchelParamedicFilled
+  id: ClothingBackpackSatchelParamedicFilledDV
   components:
   - type: StorageFill
     contents:
       - id: BoxSurvivalMedical
       - id: EmergencyRollerBedSpawnFolded
-      - id: BodyBag_Folded
+      - id: BodyBagFolded
       - id: Portafib
+
+- type: entity
+  noSpawn: true
+  parent: ClothingBackpackSatchelMedical
+  id: ClothingBackpackSatchelPsychologistFilled
+  components:
+  - type: StorageFill
+    contents:
+    - id: BoxSurvivalMedical
+    - id: RubberStampPsychologist

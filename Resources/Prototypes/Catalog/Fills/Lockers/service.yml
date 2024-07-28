@@ -9,6 +9,8 @@
       - id: WeaponShotgunDoubleBarreledRubber
       - id: DrinkShaker
       - id: ClothingEyesHudBeer
+      - id: HandLabeler
+        amount: 1
       - id: DrinkBottleBeer
         prob: 0.5
       - id: DrinkBottleBeer
@@ -19,6 +21,8 @@
         amount: 2
       - id: RagItem
         amount: 2
+      - id: LunchboxServiceFilledRandom # Delta-V Lunchboxes!
+        prob: 0.3
 
 #- type: entity
 #  id: LockerFormalFilled
@@ -33,7 +37,7 @@
   - type: StorageFill
     contents:
       - id: CrowbarRed
-      - id: MonkeyCubeBox
+      - id: VariantCubeBox
       - id: BoxMousetrap
         amount: 2
       - id: SprayBottleWater
@@ -42,12 +46,16 @@
       - id: ReagentContainerSugar
       - id: FoodCondimentPacketSalt
         amount: 3
+      - id: FoodCondimentPacketPepper
+        amount: 3
       - id: FoodCondimentBottleEnzyme
       # really, milk should go in the fridge. Unfortunately saltern only has freezers.
       # yes, I'm using this as an excuse to not have to do extra work.
-      - id: ReagentContainerMilk
+      - id: DrinkMilkCarton
         amount: 2
-      - id: ReagentContainerMilkSoy
+      - id: DrinkSoyMilkCarton
+      - id: LunchboxServiceFilledRandom # Delta-V Lunchboxes!
+        prob: 0.3
 
 - type: entity
   id: ClosetJanitorFilled
@@ -73,6 +81,8 @@
         amount: 2
       - id: Plunger
         amount: 2
+      - id: LunchboxServiceFilledRandom # Delta-V Lunchboxes!
+        prob: 0.3
 
 - type: entity
   id: ClosetLegalFilled
@@ -95,18 +105,18 @@
       - id: ClothingHandsGlovesLeather
       - id: ClothingOuterApronBotanist
       - id: ClothingHeadBandBotany
-      - id: HydroponicsToolClippers
-      - id: HydroponicsToolSpade
-      - id: HydroponicsToolMiniHoe
       - id: RobustHarvestChemistryBottle
         prob: 0.3
       - id: ClothingBeltPlant
       - id: PlantBag ##Some maps don't have nutrivend
       - id: BoxMouthSwab
+      - id: Dropper
       - id: HandLabeler
       - id: ClothingUniformOveralls
       - id: ClothingHeadHatTrucker
         prob: 0.1
+      - id: LunchboxServiceFilledRandom # Delta-V Lunchboxes!
+        prob: 0.3
 
 - type: entity
   id: LockerBotanistLoot
@@ -124,3 +134,13 @@
         prob: 0.5
       - id: NettleSeeds
         prob: 0.7
+
+- type: entity
+  id: ClosetJanitorBombFilled
+  parent: ClosetJanitorBomb
+  suffix: DO NOT MAP, Filled
+  components:
+  - type: StorageFill
+    contents:
+      - id: ClothingHeadHelmetJanitorBombSuit
+      - id: ClothingOuterSuitJanitorBomb

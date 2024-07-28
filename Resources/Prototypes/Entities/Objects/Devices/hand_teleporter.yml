@@ -9,10 +9,8 @@
     layers:
     - state: icon
   - type: HandTeleporter
-  - type: ReverseEngineering # Nyano
-    difficulty: 4
-    recipes:
-      - HandTeleporter
   - type: Tag
     tags:
     - HighRiskItem
+  - type: StealTarget
+    stealGroup: HandTeleporter

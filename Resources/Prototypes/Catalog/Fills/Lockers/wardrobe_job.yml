@@ -13,6 +13,7 @@
        - id: ClothingShoesColorBlack
          amount: 2
        - id: ClothingMaskMuzzle
+       - id: ClothingHeadsetPrison #DV - Added prisoner headsets
 
 #- type: entity
 #  id: WardrobePajamaFilled
@@ -158,7 +159,7 @@
        - id: ClothingUniformJumpsuitSec
        - id: ClothingBackpackSecurity
        - id: ClothingShoesBootsJack
-       - id: ClothingEyesGlassesSecurity
+       - id: ClothingEyesGlassesSunglasses
        - id: ClothingHeadHelmetBasic
        - id: ClothingOuterArmorPlateCarrier # DeltaV - ClothingOuterArmorBasic replaced in favour of plate carrier and stabproof vest
        - id: ClothingOuterArmorDuraVest

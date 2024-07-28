@@ -4,7 +4,9 @@
   suffix: Freezer
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/freezer.rsi
+    sprite: DeltaV/Structures/Doors/Airlocks/Standard/freezer.rsi #Delta V - Resprite Doors
+  - type: Wires
+    layoutId: AirlockService
 
 - type: entity
   parent: Airlock
@@ -12,15 +14,19 @@
   suffix: Engineering
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/engineering.rsi
+    sprite: DeltaV/Structures/Doors/Airlocks/Standard/engineering.rsi #Delta V - Resprite Doors
+  - type: PaintableAirlock
+    department: Engineering
+  - type: Wires
+    layoutId: AirlockEngineering
 
 - type: entity
-  parent: Airlock
+  parent: AirlockEngineering
   id: AirlockAtmospherics
   suffix: Atmospherics
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/atmospherics.rsi
+    sprite: DeltaV/Structures/Doors/Airlocks/Standard/atmospherics.rsi #Delta V - Resprite Doors
 
 - type: entity
   parent: Airlock
@@ -28,7 +34,11 @@
   suffix: Logistics # DeltaV - Logistics Department replacing Cargo
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/cargo.rsi
+    sprite: DeltaV/Structures/Doors/Airlocks/Standard/cargo.rsi #Delta V - Resprite Doors
+  - type: PaintableAirlock
+    department: Logistics
+  - type: Wires
+    layoutId: AirlockCargo
 
 - type: entity
   parent: Airlock
@@ -36,23 +46,24 @@
   suffix: Medical
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/medical.rsi
+    sprite: DeltaV/Structures/Doors/Airlocks/Standard/medical.rsi #Delta V - Resprite Doors
+  - type: PaintableAirlock
+    department: Medical
+  - type: Wires
+    layoutId: AirlockMedical
 
 - type: entity
-  parent: Airlock
+  parent: AirlockMedical
   id: AirlockVirology
   suffix: Virology
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/virology.rsi
+    sprite: DeltaV/Structures/Doors/Airlocks/Standard/virology.rsi #Delta V - Resprite Doors
 
 - type: entity
-  parent: Airlock
+  parent: AirlockMedical
   id: AirlockChemistry
   suffix: Chemistry
-  components:
-  - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/medical.rsi
 
 - type: entity
   parent: Airlock
@@ -60,7 +71,11 @@
   suffix: Epistemics # DeltaV - Epistemics Department replacing Science
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/science.rsi
+    sprite: DeltaV/Structures/Doors/Airlocks/Standard/science.rsi #Delta V - Resprite Doors
+  - type: PaintableAirlock
+    department: Epistemics
+  - type: Wires
+    layoutId: AirlockScience
 
 - type: entity
   parent: Airlock
@@ -68,9 +83,13 @@
   suffix: Command
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/command.rsi
+    sprite: DeltaV/Structures/Doors/Airlocks/Standard/command.rsi #Delta V - Resprite Doors
   - type: WiresPanelSecurity
     securityLevel: medSecurity
+  - type: PaintableAirlock
+    department: Command
+  - type: Wires
+    layoutId: AirlockCommand
 
 - type: entity
   parent: Airlock
@@ -78,85 +97,74 @@
   suffix: Security
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/security.rsi
+    sprite: DeltaV/Structures/Doors/Airlocks/Standard/security.rsi #Delta V - Resprite Doors
+  - type: PaintableAirlock
+    department: Security
+  - type: Wires
+    layoutId: AirlockSecurity
 
 - type: entity
   parent: Airlock
   id: AirlockMaint
-  name: maintenance hatch
+  name: maintenance access
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/maint.rsi
+    sprite: DeltaV/Structures/Doors/Airlocks/Standard/maint.rsi #Delta V - Resprite Doors
 
 - type: entity
-  parent: Airlock
+  parent: AirlockSecurity # if you get syndie door somehow it counts as sec
   id: AirlockSyndicate
   suffix: Syndicate
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/syndicate.rsi
+    sprite: DeltaV/Structures/Doors/Airlocks/Standard/syndicate.rsi #Delta V - Resprite Doors
 
 - type: entity
-  parent: Airlock
+  parent: AirlockCargo
   id: AirlockMining
   suffix: Mining(Salvage)
   components:
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/mining.rsi
-
-# Glass
+  - type: Wires
+    layoutId: AirlockCargo
 
 - type: entity
-  id: AirlockGlass
-  parent: Airlock
-  name: glass airlock
+  parent: AirlockCommand # if you get centcom door somehow it counts as command, also inherit panel
+  id: AirlockCentralCommand
+  suffix: Central Command
   components:
-  - type: MeleeSound
-    soundGroups:
-      Brute:
-        path:
-          "/Audio/Effects/glass_hit.ogg"
-  - type: Door
-    occludes: false
-  - type: Occluder
-    enabled: false
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/glass.rsi
-  - type: AnimationPlayer
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.49,-0.49,0.49,0.49" # don't want this colliding with walls or they won't close
-        density: 100
-        mask:
-        - FullTileMask
-        layer:     #removed opaque from the layer, allowing lasers to pass through glass airlocks
-        - GlassAirlockLayer
-  - type: LayerChangeOnWeld
-    unWeldedLayer: GlassAirlockLayer
-    weldedLayer: GlassLayer
-  - type: Construction
-    graph: Airlock
-    node: glassAirlock
-  - type: PaintableAirlock
-    group: Glass
-  - type: RadiationBlocker
-    resistance: 2
-  - type: Tag
-    tags:
-      - GlassAirlock
-      # This tag is used to nagivate the Airlock construction graph. It's needed because the construction graph is shared between Airlock, AirlockGlass, and HighSecDoor
+    sprite: DeltaV/Structures/Doors/Airlocks/Standard/centcomm.rsi #Delta V - Resprite Doors
+
+- type: entity
+  parent: Airlock
+  id: AirlockHatch
+  name: airtight hatch
+  components:
+  - type: Sprite
+    sprite: Structures/Doors/Airlocks/Standard/hatch.rsi
+
+- type: entity
+  parent: Airlock
+  id: AirlockHatchMaintenance
+  name: maintenance hatch
+  components:
+  - type: Sprite
+    sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
+
+# Glass
 - type: entity
   parent: AirlockGlass
   id: AirlockEngineeringGlass
   suffix: Engineering
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/engineering.rsi
+    sprite: DeltaV/Structures/Doors/Airlocks/Glass/engineering.rsi #Delta V - Resprite Doors
   - type: PaintableAirlock
-    group: Glass
+    department: Engineering
+  - type: Wires
+    layoutId: AirlockEngineering
 
 - type: entity
   parent: AirlockGlass
@@ -164,19 +172,15 @@
   suffix: Maintenance
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/maint.rsi
-  - type: PaintableAirlock
-    group: Glass
+    sprite: DeltaV/Structures/Doors/Airlocks/Glass/maint.rsi #Delta V - Resprite Doors
 
 - type: entity
-  parent: AirlockGlass
+  parent: AirlockEngineeringGlass
   id: AirlockAtmosphericsGlass
   suffix: Atmospherics
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/atmospherics.rsi
-  - type: PaintableAirlock
-    group: Glass
+    sprite: DeltaV/Structures/Doors/Airlocks/Glass/atmospherics.rsi #Delta V - Resprite Doors
 
 - type: entity
   parent: AirlockGlass
@@ -184,19 +188,11 @@
   suffix: Logistics # DeltaV - Logistics Department replacing Cargo
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/cargo.rsi
+    sprite: DeltaV/Structures/Doors/Airlocks/Glass/cargo.rsi #Delta V - Resprite Doors
   - type: PaintableAirlock
-    group: Glass
-
-- type: entity
-  parent: AirlockGlass
-  id: AirlockChemistryGlass
-  suffix: Chemistry
-  components:
-  - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/medical.rsi
-  - type: PaintableAirlock
-    group: Glass
+    department: Logistics
+  - type: Wires
+    layoutId: AirlockCargo
 
 - type: entity
   parent: AirlockGlass
@@ -204,19 +200,24 @@
   suffix: Medical
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/medical.rsi
+    sprite: DeltaV/Structures/Doors/Airlocks/Glass/medical.rsi #Delta V - Resprite Doors
   - type: PaintableAirlock
-    group: Glass
+    department: Medical
+  - type: Wires
+    layoutId: AirlockMedical
 
 - type: entity
-  parent: AirlockGlass
+  parent: AirlockMedicalGlass
+  id: AirlockChemistryGlass
+  suffix: Chemistry
+
+- type: entity
+  parent: AirlockMedicalGlass
   id: AirlockVirologyGlass
   suffix: Virology
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/virology.rsi
-  - type: PaintableAirlock
-    group: Glass
+    sprite: DeltaV/Structures/Doors/Airlocks/Glass/virology.rsi #Delta V - Resprite Doors
 
 - type: entity
   parent: AirlockGlass
@@ -224,9 +225,11 @@
   suffix: Epistemics # DeltaV - Epistemics Department replacing Science
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/science.rsi
+    sprite: DeltaV/Structures/Doors/Airlocks/Glass/science.rsi #Delta V - Resprite Doors
   - type: PaintableAirlock
-    group: Glass
+    department: Epistemics
+  - type: Wires
+    layoutId: AirlockScience
 
 - type: entity
   parent: AirlockGlass
@@ -234,11 +237,13 @@
   suffix: Command
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/command.rsi
+    sprite: DeltaV/Structures/Doors/Airlocks/Glass/command.rsi #Delta V - Resprite Doors
   - type: PaintableAirlock
-    group: Glass
+    department: Command
   - type: WiresPanelSecurity
     securityLevel: medSecurity
+  - type: Wires
+    layoutId: AirlockCommand
 
 - type: entity
   parent: AirlockGlass
@@ -246,24 +251,32 @@
   suffix: Security
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/security.rsi
+    sprite: DeltaV/Structures/Doors/Airlocks/Glass/security.rsi #Delta V - Resprite Doors
   - type: PaintableAirlock
-    group: Glass
+    department: Security
+  - type: Wires
+    layoutId: AirlockSecurity
 
 - type: entity
-  parent: AirlockGlass
+  parent: AirlockSecurityGlass # see standard
   id: AirlockSyndicateGlass
   suffix: Syndicate
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/syndicate.rsi
-  - type: PaintableAirlock
-    group: Glass
+    sprite: DeltaV/Structures/Doors/Airlocks/Glass/syndicate.rsi #Delta V - Resprite Doors
 
 - type: entity
-  parent: AirlockGlass
+  parent: AirlockCargoGlass
   id: AirlockMiningGlass
   suffix: Mining(Salvage)
   components:
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Glass/mining.rsi
+
+- type: entity
+  parent: AirlockCommandGlass # see standard
+  id: AirlockCentralCommandGlass
+  suffix: Central Command
+  components:
+  - type: Sprite
+    sprite: DeltaV/Structures/Doors/Airlocks/Glass/centcomm.rsi #Delta V - Resprite Doors

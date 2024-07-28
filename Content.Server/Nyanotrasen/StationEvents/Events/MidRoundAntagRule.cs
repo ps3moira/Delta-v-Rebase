@@ -1,41 +1,61 @@
-using System.Linq;
-using Robust.Shared.Random;
-using Content.Server.GameTicking.Rules.Components;
+using Content.Server.Antag;
 using Content.Server.StationEvents.Components;
+using Robust.Shared.Map;
 
 namespace Content.Server.StationEvents.Events;
 
-internal sealed class MidRoundAntagRule : StationEventSystem<MidRoundAntagRuleComponent>
+/// <summary>
+/// Makes antags spawn at a random midround antag or vent critter spawner.
+/// </summary>
+public sealed class MidRoundAntagRule : StationEventSystem<MidRoundAntagRuleComponent>
 {
-    [Dependency] private readonly IRobustRandom _robustRandom = default!;
+    [Dependency] private readonly SharedTransformSystem _xform = default!;
 
-    protected override void Started(EntityUid uid, MidRoundAntagRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
+    public override void Initialize()
     {
-        base.Started(uid, component, gameRule, args);
+        base.Initialize();
 
-        var spawnLocations = EntityManager.EntityQuery<MidRoundAntagSpawnLocationComponent, TransformComponent>().ToList();
-        var backupSpawnLocations = EntityManager.EntityQuery<VentCritterSpawnLocationComponent, TransformComponent>().ToList();
+        SubscribeLocalEvent<MidRoundAntagRuleComponent, AntagSelectLocationEvent>(OnSelectLocation);
+    }
 
-        TransformComponent? spawn = new();
-
-        if (spawnLocations.Count > 0)
-        {
-            var spawnLoc = _robustRandom.Pick(spawnLocations);
-            spawn = spawnLoc.Item2;
-        } else if (backupSpawnLocations.Count > 0)
-        {
-            var spawnLoc = _robustRandom.Pick(backupSpawnLocations);
-            spawn = spawnLoc.Item2;
-        }
-
-        if (spawn == null)
+    private void OnSelectLocation(Entity<MidRoundAntagRuleComponent> ent, ref AntagSelectLocationEvent args)
+    {
+        if (!TryGetRandomStation(out var station))
             return;
 
-        if (spawn.GridUid == null)
+        var spawns = FindSpawns(station.Value);
+        if (spawns.Count == 0)
         {
+            Log.Warning($"Couldn't find any suitable midround antag spawners for {ToPrettyString(ent):rule}");
             return;
         }
 
-        Spawn(_robustRandom.Pick(component.MidRoundAntags), spawn.Coordinates);
+        args.Coordinates.AddRange(spawns);
+    }
+
+    private List<MapCoordinates> FindSpawns(EntityUid station)
+    {
+        var spawns = new List<MapCoordinates>();
+        var query = EntityQueryEnumerator<MidRoundAntagSpawnLocationComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out _, out var xform))
+        {
+            if (StationSystem.GetOwningStation(uid, xform) == station && xform.GridUid != null)
+                spawns.Add(_xform.GetMapCoordinates(xform));
+        }
+
+        // if there are any midround antag spawns mapped, use them
+        if (spawns.Count > 0)
+            return spawns;
+
+        // otherwise, fall back to vent critter spawns
+        Log.Info($"Station {ToPrettyString(station):station} has no midround antag spawnpoints mapped, falling back. Please map them!");
+        var fallbackQuery = EntityQueryEnumerator<VentCritterSpawnLocationComponent, TransformComponent>();
+        while (fallbackQuery.MoveNext(out var uid, out _, out var xform))
+        {
+            if (StationSystem.GetOwningStation(uid, xform) == station && xform.GridUid != null)
+                spawns.Add(_xform.GetMapCoordinates(xform));
+        }
+
+        return spawns;
     }
 }

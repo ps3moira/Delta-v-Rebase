@@ -1,3 +1,4 @@
+admin-player-actions-reason = Reason
 admin-player-actions-bans = Ban List
 admin-player-actions-notes = Notes
 admin-player-actions-kick = Kick
@@ -8,5 +9,5 @@ admin-player-actions-spawn = Spawn here
 admin-player-spawn-failed = Failed to find valid coordinates
 
 admin-player-actions-clone = Clone
-admin-player-actions-teleport = Teleport To
+admin-player-actions-follow = Follow
 admin-player-actions-confirm = Are you sure?

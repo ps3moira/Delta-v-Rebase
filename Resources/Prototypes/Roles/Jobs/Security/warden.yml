@@ -4,15 +4,12 @@
   description: job-description-warden
   playTimeTracker: JobWarden
   requirements:
-#    - !type:RoleTimeRequirement # DeltaV - No SecurityOfficer time requirement
-#      role: JobSecurityOfficer
-#      time: 36000 #10 hrs
-    - !type:DepartmentTimeRequirement # DeltaV - Security time requirement
-      department: Security
-      time: 36000 # 10 hours
-    - !type:RoleTimeRequirement # DeltaV - Prisoner time requirement
-      role: JobPrisoner
-      time: 3600 # 1 hour
+    - !type:RoleTimeRequirement # DeltaV - JobSecurityOfficer time requirement. Make them experienced in proper officer work.
+      role: JobSecurityOfficer
+      time: 36000 # DeltaV - 10 hrs
+    - !type:RoleTimeRequirement # DeltaV - JobDetective time requirement. Give them an understanding of basic forensics.
+      role: JobDetective
+      time: 21600 # DeltaV - 6 hours
   startingGear: WardenGear
   icon: "JobIconWarden"
   supervisors: job-supervisors-hos
@@ -22,9 +19,10 @@
   #- Brig # Delta V: Removed
   - Armory
   - Maintenance
-  - Service
+  #- Service # Delta V: Access adjustments
   - External
   - Detective
+  - Cryogenics
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]
@@ -32,16 +30,7 @@
 - type: startingGear
   id: WardenGear
   equipment:
-    head: ClothingHeadHatWarden
-    jumpsuit: ClothingUniformJumpsuitWarden
-    back: ClothingBackpackSecurityFilled
-    shoes: ClothingShoesBootsCombatFilled
     eyes: ClothingEyesGlassesSecurity
-    outerClothing: ClothingOuterCoatWarden
     id: WardenPDA
     ears: ClothingHeadsetSecurity
-    belt: ClothingBeltSecurityFilled
     pocket1: WeaponPistolMk58Nonlethal
-  innerClothingSkirt: ClothingUniformJumpskirtWarden
-  satchel: ClothingBackpackSatchelSecurityFilled
-  duffelbag: ClothingBackpackDuffelSecurityFilled

@@ -17,7 +17,7 @@
         - ReagentId: Nutriment
           Quantity: 5
   - type: Item
-    size: 1
+    size: Tiny
 
 # Muffins/Buns
 
@@ -163,9 +163,6 @@
 
 # Nuggets
 
-- type: Tag
-  id: Nugget
-
 - type: entity
   name: chicken nugget
   parent: FoodBakedBase
@@ -184,11 +181,8 @@
     available:
       - enum.DamageStateVisualLayers.Base:
           tendie: ""
-      - enum.DamageStateVisualLayers.Base:
           lizard: ""
-      - enum.DamageStateVisualLayers.Base:
           star: ""
-      - enum.DamageStateVisualLayers.Base:
           corgi: ""
   - type: SolutionContainerManager
     solutions:
@@ -533,6 +527,9 @@
           Quantity: 5
         - ReagentId: Theobromine
           Quantity: 3
+  - type: Tag
+    tags:
+    - Slice
 
 - type: entity
   name: special brownies
@@ -588,6 +585,9 @@
           Quantity: 3
         - ReagentId: THC
           Quantity: 25
+  - type: Tag
+    tags:
+    - Slice
 
 - type: entity
   name: onion rings
@@ -604,7 +604,7 @@
     - type: SolutionContainerManager
       solutions:
         food:
-          maxVol: 1
+          maxVol: 4
           reagents:
           - ReagentId: Nutriment
             Quantity: 1

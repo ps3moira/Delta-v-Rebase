@@ -1,26 +1,32 @@
 - type: entity
   id: UraniumWindow
   name: uranium window
-  parent: Window
+  parent: WindowRCDResistant
   components:
   - type: Sprite
     drawdepth: WallTops
-    sprite: Structures/Windows/uranium_window.rsi
+    sprite: DeltaV/Structures/Windows/uranium_window.rsi #Delta V - Resprite windows
   - type: Icon
-    sprite: Structures/Windows/uranium_window.rsi
+    sprite: DeltaV/Structures/Windows/uranium_window.rsi #Delta V - Resprite windows
     state: full
   - type: Damageable
-    damageContainer: Inorganic
+    damageContainer: StructuralInorganic
     damageModifierSet: RGlass
   - type: Destructible
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 400
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 60
       behaviors:
       - !type:PlaySoundBehavior
         sound:
-          collection: GlassBreak
+          collection: WindowShatter
       - !type:SpawnEntitiesBehavior
         spawn:
           ShardGlassUranium:
@@ -36,7 +42,7 @@
   - type: Appearance
   - type: DamageVisuals
     thresholds: [4, 8, 12]
-    damageDivisor: 12
+    damageDivisor: 3.333
     trackAllDamage: true
     damageOverlay:
       sprite: Structures/Windows/cracks.rsi
@@ -46,9 +52,53 @@
     resistance: 3
 
 - type: entity
+  id: UraniumWindowDirectional
+  parent: WindowDirectional
+  name: directional uranium window
+  description: Don't smudge up the glass down there.
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Window
+  components:
+  - type: Sprite
+    sprite: DeltaV/Structures/Windows/directional.rsi #Delta V - Resprite windows
+    state: uranium_window
+  - type: Icon
+    sprite: DeltaV/Structures/Windows/directional.rsi #Delta V - Resprite windows
+    state: uranium_window
+  - type: Construction
+    graph: WindowDirectional
+    node: uraniumWindowDirectional
+  - type: Appearance
+  - type: DamageVisuals
+    thresholds: [4, 8, 12]
+    damageDivisor: 3.333
+    trackAllDamage: true
+    damageOverlay:
+      sprite: Structures/Windows/cracks_directional.rsi
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WindowShatter
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          ShardGlassUranium:
+            min: 1
+            max: 2
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: StaticPrice
+    price: 40
+
+- type: entity
   parent: UraniumWindow
   id: UraniumWindowDiagonal
-  name: diagonal uranium window
   suffix: diagonal
   placement:
     mode: SnapgridCenter
@@ -79,6 +129,11 @@
         - FullTileMask
         layer:
         - GlassLayer
+  - type: Airtight
+    noAirWhenFullyAirBlocked: false
+    airBlockedDirection:
+    - South
+    - East
   - type: DamageVisuals
     damageOverlay:
       sprite: Structures/Windows/cracks_diagonal.rsi

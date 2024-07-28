@@ -37,6 +37,7 @@
 #  - Chapel
   - Hydroponics
   - External
+  - Cryogenics
   # I mean they'll give themselves the rest of the access levels *anyways*.
   # As of 15/03/23 they can't do that so here's MOST of the rest of the access levels.
   # Head level access that isn't their own was deliberately left out, get AA from the captain instead.
@@ -47,8 +48,8 @@
 #  - Detective
 #  - Salvage
 #  - Security # NoooOoOo!! My HoPcurity!1
-#  - Brig # Lawyer access # Delta V: Removed
-  - Lawyer
+#  - Brig
+#  - Lawyer # Lawyer is now part of the justice dept
 #  - Cargo
 #  - Atmospherics
 #  - Medical
@@ -73,14 +74,8 @@
 - type: startingGear
   id: HoPGear
   equipment:
-    jumpsuit: ClothingUniformJumpsuitHoP
-    back: ClothingBackpackHOPFilled
-    shoes: ClothingShoesLeather # DeltaV - HoP needs something better than plebe shoes.
-    head: ClothingHeadHatHopcap
+    #shoes: ClothingShoesLeather # DeltaV - Commented for Loadouts
     id: HoPPDA
+    #gloves: ClothingHandsGlovesHop # DeltaV - Commented for Loadouts
     ears: ClothingHeadsetHoP # DeltaV - HoP is now a service role, replaces their all channels headset.
-    gloves: ClothingHandsGlovesHop
     belt: BoxFolderClipboard
-  innerClothingSkirt: ClothingUniformJumpskirtHoP
-  satchel: ClothingBackpackSatchelHOPFilled
-  duffelbag: ClothingBackpackDuffelHOPFilled

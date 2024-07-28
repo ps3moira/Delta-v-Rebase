@@ -1,7 +1,9 @@
 using System.Linq;
+using Content.Server.Administration.Logs;
 using Content.Server.Botany;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
+using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Server.Fluids.EntitySystems;
 using Content.Server.Psionics;
 using Content.Shared.Abilities.Psionics;
@@ -9,6 +11,7 @@ using Content.Shared.Chat;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
+using Content.Shared.Database;
 using Content.Shared.Interaction;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Psionics.Glimmer;
@@ -29,6 +32,7 @@ public sealed class OracleSystem : EntitySystem
     [Dependency] private readonly SolutionContainerSystem _solutionSystem = default!;
     [Dependency] private readonly GlimmerSystem _glimmerSystem = default!;
     [Dependency] private readonly PuddleSystem _puddleSystem = default!;
+    [Dependency] private readonly IAdminLogManager _adminLog = default!;
 
     public override void Update(float frameTime)
     {
@@ -37,6 +41,7 @@ public sealed class OracleSystem : EntitySystem
         {
             oracle.Accumulator += frameTime;
             oracle.BarkAccumulator += frameTime;
+            oracle.RejectAccumulator += frameTime;
             if (oracle.BarkAccumulator >= oracle.BarkTime.TotalSeconds)
             {
                 oracle.BarkAccumulator = 0;
@@ -119,16 +124,24 @@ public sealed class OracleSystem : EntitySystem
 
         if (!validItem)
         {
-            if (!HasComp<RefillableSolutionComponent>(args.Used))
+            if (!HasComp<RefillableSolutionComponent>(args.Used) &&
+                component.RejectAccumulator >= component.RejectTime.TotalSeconds)
+            {
+                component.RejectAccumulator = 0;
                 _chat.TrySendInGameICMessage(uid, _random.Pick(component.RejectMessages), InGameICChatType.Speak, true);
+            }
             return;
         }
 
         EntityManager.QueueDeleteEntity(args.Used);
 
+        _adminLog.Add(LogType.InteractHand,
+            LogImpact.Medium,
+            $"{ToPrettyString(args.User):player} sold {ToPrettyString(args.Used)} to {ToPrettyString(uid)}.");
+
         EntityManager.SpawnEntity("ResearchDisk5000", Transform(args.User).Coordinates);
 
-        DispenseLiquidReward(uid);
+        DispenseLiquidReward(uid, component);
 
         var i = _random.Next(1, 4);
 
@@ -153,7 +166,7 @@ public sealed class OracleSystem : EntitySystem
         return false;
     }
 
-    private void DispenseLiquidReward(EntityUid uid)
+    private void DispenseLiquidReward(EntityUid uid, OracleComponent component)
     {
         if (!_solutionSystem.TryGetSolution(uid, OracleComponent.SolutionName, out var fountainSol))
             return;
@@ -171,11 +184,11 @@ public sealed class OracleSystem : EntitySystem
         if (_random.Prob(0.2f))
             reagent = _random.Pick(allReagents);
         else
-            reagent = _random.Pick(OracleComponent.RewardReagents);
+            reagent = _random.Pick(component.RewardReagents);
 
         sol.AddReagent(reagent, amount);
 
-        _solutionSystem.TryMixAndOverflow(uid, fountainSol, sol, fountainSol.MaxVolume, out var overflowing);
+        _solutionSystem.TryMixAndOverflow(fountainSol.Value, sol, fountainSol.Value.Comp.Solution.MaxVolume, out var overflowing);
 
         if (overflowing != null && overflowing.Volume > 0)
             _puddleSystem.TrySpillAt(uid, overflowing, out var _);
@@ -185,6 +198,7 @@ public sealed class OracleSystem : EntitySystem
     {
         component.Accumulator = 0;
         component.BarkAccumulator = 0;
+        component.RejectAccumulator = 0;
         var protoString = GetDesiredItem(component);
         if (_prototypeManager.TryIndex<EntityPrototype>(protoString, out var proto))
             component.DesiredPrototype = proto;

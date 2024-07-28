@@ -15,6 +15,7 @@ using Content.Shared.Storage.Components;
 using Content.Shared.Tools.Systems;
 using Content.Shared.Verbs;
 using Content.Shared.Wall;
+using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
@@ -45,8 +46,14 @@ public abstract class SharedEntityStorageSystem : EntitySystem
     [Dependency] protected readonly SharedPopupSystem Popup = default!;
     [Dependency] protected readonly SharedTransformSystem TransformSystem = default!;
     [Dependency] private   readonly WeldableSystem _weldable = default!;
+    [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
 
     public const string ContainerName = "entity_storage";
+
+    protected void OnEntityUnpausedEvent(EntityUid uid, SharedEntityStorageComponent component, EntityUnpausedEvent args)
+    {
+        component.NextInternalOpenAttempt += args.PausedTime;
+    }
 
     protected void OnGetState(EntityUid uid, SharedEntityStorageComponent component, ref ComponentGetState args)
     {
@@ -54,7 +61,8 @@ public abstract class SharedEntityStorageSystem : EntitySystem
             component.Capacity,
             component.IsCollidableWhenOpen,
             component.OpenOnMove,
-            component.EnteringRange);
+            component.EnteringRange,
+            component.NextInternalOpenAttempt);
     }
 
     protected void OnHandleState(EntityUid uid, SharedEntityStorageComponent component, ref ComponentHandleState args)
@@ -66,6 +74,7 @@ public abstract class SharedEntityStorageSystem : EntitySystem
         component.IsCollidableWhenOpen = state.IsCollidableWhenOpen;
         component.OpenOnMove = state.OpenOnMove;
         component.EnteringRange = state.EnteringRange;
+        component.NextInternalOpenAttempt = state.NextInternalOpenAttempt;
     }
 
     protected virtual void OnComponentInit(EntityUid uid, SharedEntityStorageComponent component, ComponentInit args)
@@ -82,7 +91,7 @@ public abstract class SharedEntityStorageSystem : EntitySystem
 
     protected void OnInteract(EntityUid uid, SharedEntityStorageComponent component, ActivateInWorldEvent args)
     {
-        if (args.Handled)
+        if (args.Handled || !args.Complex)
             return;
 
         args.Handled = true;
@@ -123,10 +132,12 @@ public abstract class SharedEntityStorageSystem : EntitySystem
         if (!HasComp<HandsComponent>(args.Entity))
             return;
 
-        if (_timing.CurTime < component.LastInternalOpenAttempt + SharedEntityStorageComponent.InternalOpenAttemptDelay)
+        if (_timing.CurTime < component.NextInternalOpenAttempt)
             return;
 
-        component.LastInternalOpenAttempt = _timing.CurTime;
+        component.NextInternalOpenAttempt = _timing.CurTime + SharedEntityStorageComponent.InternalOpenAttemptDelay;
+        Dirty(uid, component);
+
         if (component.OpenOnMove)
         {
             TryOpenStorage(args.Entity, uid);
@@ -198,6 +209,9 @@ public abstract class SharedEntityStorageSystem : EntitySystem
         if (!ResolveStorage(uid, ref component))
             return;
 
+        if (component.Open)
+            return;
+
         var beforeev = new StorageBeforeOpenEvent();
         RaiseLocalEvent(uid, ref beforeev);
         component.Open = true;
@@ -214,6 +228,16 @@ public abstract class SharedEntityStorageSystem : EntitySystem
     public void CloseStorage(EntityUid uid, SharedEntityStorageComponent? component = null)
     {
         if (!ResolveStorage(uid, ref component))
+            return;
+
+        if (!component.Open)
+            return;
+
+        // Prevent the container from closing if it is queued for deletion. This is so that the container-emptying
+        // behaviour of DestructionEventArgs is respected. This exists because malicious players were using
+        // destructible boxes to delete entities by having two players simultaneously destroy and close the box in
+        // the same tick.
+        if (EntityManager.IsQueuedForDeletion(uid))
             return;
 
         component.Open = false;
@@ -246,7 +270,7 @@ public abstract class SharedEntityStorageSystem : EntitySystem
         ModifyComponents(uid, component);
         if (_net.IsClient && _timing.IsFirstTimePredicted)
             _audio.PlayPvs(component.CloseSound, uid);
-        component.LastInternalOpenAttempt = default;
+
         var afterev = new StorageAfterCloseEvent();
         RaiseLocalEvent(uid, ref afterev);
     }
@@ -258,12 +282,12 @@ public abstract class SharedEntityStorageSystem : EntitySystem
 
         if (component.Open)
         {
-            TransformSystem.SetWorldPosition(toInsert, TransformSystem.GetWorldPosition(container));
+            TransformSystem.DropNextTo(toInsert, container);
             return true;
         }
 
         _joints.RecursiveClearJoints(toInsert);
-        if (!component.Contents.Insert(toInsert, EntityManager))
+        if (!_container.Insert(toInsert, component.Contents))
             return false;
 
         var inside = EnsureComp<InsideEntityStorageComponent>(toInsert);
@@ -280,7 +304,7 @@ public abstract class SharedEntityStorageSystem : EntitySystem
             return false;
 
         RemComp<InsideEntityStorageComponent>(toRemove);
-        component.Contents.Remove(toRemove, EntityManager);
+        _container.Remove(toRemove, component.Contents);
         var pos = TransformSystem.GetWorldPosition(xform) + TransformSystem.GetWorldRotation(xform).RotateVec(component.EnteringOffset);
         TransformSystem.SetWorldPosition(toRemove, pos);
         return true;
@@ -334,6 +358,17 @@ public abstract class SharedEntityStorageSystem : EntitySystem
                 Popup.PopupClient(Loc.GetString("entity-storage-component-welded-shut-message"), target, user);
 
             return false;
+        }
+
+        if (_container.IsEntityInContainer(target))
+        {
+            if (_container.TryGetOuterContainer(target,Transform(target) ,out var container) &&
+                !HasComp<HandsComponent>(container.Owner))
+            {
+                Popup.PopupClient(Loc.GetString("entity-storage-component-already-contains-user-message"), user, user);
+
+                return false;
+            }
         }
 
         //Checks to see if the opening position, if offset, is inside of a wall.
@@ -399,7 +434,7 @@ public abstract class SharedEntityStorageSystem : EntitySystem
 
         var targetIsMob = HasComp<BodyComponent>(toInsert);
         var storageIsItem = HasComp<ItemComponent>(container);
-        var allowedToEat = component.Whitelist?.IsValid(toInsert) ?? HasComp<ItemComponent>(toInsert);
+        var allowedToEat = component.Whitelist == null ? HasComp<ItemComponent>(toInsert) : _whitelistSystem.IsValid(component.Whitelist, toInsert);
 
         // BEFORE REPLACING THIS WITH, I.E. A PROPERTY:
         // Make absolutely 100% sure you have worked out how to stop people ending up in backpacks.

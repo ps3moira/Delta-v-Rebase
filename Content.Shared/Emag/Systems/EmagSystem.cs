@@ -6,7 +6,9 @@ using Content.Shared.Emag.Components;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
+using Content.Shared.Silicons.Laws.Components;
 using Content.Shared.Tag;
+using Content.Shared.Whitelist;
 
 namespace Content.Shared.Emag.Systems;
 
@@ -22,6 +24,7 @@ public sealed class EmagSystem : EntitySystem
     [Dependency] private readonly SharedChargesSystem _charges = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!; // DeltaV - Add a whitelist/blacklist to the Emag
 
     public override void Initialize()
     {
@@ -48,6 +51,15 @@ public sealed class EmagSystem : EntitySystem
 
         if (_tag.HasTag(target, comp.EmagImmuneTag))
             return false;
+
+        // DeltaV - Add a whitelist / blacklist to the Emag
+        if (_whitelist.IsWhitelistFail(comp.Whitelist, target)
+            || _whitelist.IsBlacklistPass(comp.Blacklist, target))
+        {
+            _popup.PopupClient(Loc.GetString("emag-invalid-target", ("emag", uid), ("target", target)), user, user);
+            return false;
+        }
+        // End of DeltaV code
 
         TryComp<LimitedChargesComponent>(uid, out var charges);
         if (_charges.IsEmpty(uid, charges))
@@ -79,6 +91,13 @@ public sealed class EmagSystem : EntitySystem
         if (HasComp<EmaggedComponent>(target))
             return false;
 
+        var onAttemptEmagEvent = new OnAttemptEmagEvent(user);
+        RaiseLocalEvent(target, ref onAttemptEmagEvent);
+
+        // prevent emagging if attempt fails
+        if (onAttemptEmagEvent.Handled)
+            return false;
+
         var emaggedEvent = new GotEmaggedEvent(user);
         RaiseLocalEvent(target, ref emaggedEvent);
 
@@ -90,3 +109,6 @@ public sealed class EmagSystem : EntitySystem
 
 [ByRefEvent]
 public record struct GotEmaggedEvent(EntityUid UserUid, bool Handled = false, bool Repeatable = false);
+
+[ByRefEvent]
+public record struct OnAttemptEmagEvent(EntityUid UserUid, bool Handled = false);

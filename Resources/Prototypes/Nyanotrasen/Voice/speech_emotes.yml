@@ -1,6 +1,7 @@
 # vocal emotes
 - type: emote
   id: Hiss
+  name: nyan-chat-emote-name-hiss
   category: Vocal
   chatMessages: [hisses.]
   chatTriggers:
@@ -12,12 +13,14 @@
 
 - type: emote
   id: Meow
+  name: nyan-chat-emote-name-meow
   category: Vocal
   chatMessages: [meows.]
   chatTriggers:
     - meow.
     - meow!
     - meows.
+    - meows~
     - meows!
     - meowing.
     - meowed.
@@ -27,21 +30,31 @@
     - nya.
     - nyas.
     - nyas!
+    - mraow.
+    - mraow!
+    - mraow~
+    - mraows.
+    - mraows!
+    - mraows~
 
 - type: emote
   id: Mew
+  name: nyan-chat-emote-name-mew
   category: Vocal
   chatMessages: [mews.]
   chatTriggers:
     - mew.
     - mew!
+    - mew~
     - mews.
     - mews!
+    - mews~
     - mewing.
     - mewed.
 
 - type: emote
   id: Growl
+  name: chat-emote-name-growl
   category: Vocal
   chatMessages: [growls.]
   chatTriggers:
@@ -53,11 +66,13 @@
 
 - type: emote
   id: Purr
+  name: chat-emote-name-purr
   category: Vocal
   chatMessages: [purrs.]
   chatTriggers:
     - purr.
     - purrs.
+    - purrs~
     - purrs!
     - purring.
     - purred.

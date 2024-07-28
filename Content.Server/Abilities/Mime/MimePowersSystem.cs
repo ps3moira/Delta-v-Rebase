@@ -1,5 +1,4 @@
 using Content.Server.Popups;
-using Content.Server.Speech.Muting;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Events;
 using Content.Shared.Alert;
@@ -10,7 +9,8 @@ using Content.Shared.Physics;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
-using Content.Shared.Abilities.Psionics; //Nyano - Summary: Makes Mime psionic. 
+using Content.Shared.Abilities.Psionics; //Nyano - Summary: Makes Mime psionic.
+using Content.Shared.Speech.Muting;
 
 namespace Content.Server.Abilities.Mime
 {
@@ -55,9 +55,9 @@ namespace Content.Server.Abilities.Mime
         private void OnComponentInit(EntityUid uid, MimePowersComponent component, ComponentInit args)
         {
             EnsureComp<MutedComponent>(uid);
-            _alertsSystem.ShowAlert(uid, AlertType.VowOfSilence);
+            _alertsSystem.ShowAlert(uid, component.VowAlert);
             _actionsSystem.AddAction(uid, ref component.InvisibleWallActionEntity, component.InvisibleWallAction, uid);
-            //Nyano - Summary: Add Psionic Ability to Mime. 
+            //Nyano - Summary: Add Psionic Ability to Mime.
             if (TryComp<PsionicComponent>(uid, out var psionic) && psionic.PsionicAbility == null)
                 psionic.PsionicAbility = component.InvisibleWallActionEntity;
         }
@@ -89,7 +89,7 @@ namespace Content.Server.Abilities.Mime
             }
 
             // Check there are no mobs there
-            foreach (var entity in _lookupSystem.GetEntitiesIntersecting(tile.Value, 0f))
+            foreach (var entity in _lookupSystem.GetLocalEntitiesIntersecting(tile.Value, 0f))
             {
                 if (HasComp<MobStateComponent>(entity) && entity != uid)
                 {
@@ -122,8 +122,8 @@ namespace Content.Server.Abilities.Mime
             mimePowers.VowBroken = true;
             mimePowers.VowRepentTime = _timing.CurTime + mimePowers.VowCooldown;
             RemComp<MutedComponent>(uid);
-            _alertsSystem.ClearAlert(uid, AlertType.VowOfSilence);
-            _alertsSystem.ShowAlert(uid, AlertType.VowBroken);
+            _alertsSystem.ClearAlert(uid, mimePowers.VowAlert);
+            _alertsSystem.ShowAlert(uid, mimePowers.VowBrokenAlert);
             _actionsSystem.RemoveAction(uid, mimePowers.InvisibleWallActionEntity);
         }
 
@@ -145,8 +145,8 @@ namespace Content.Server.Abilities.Mime
             mimePowers.ReadyToRepent = false;
             mimePowers.VowBroken = false;
             AddComp<MutedComponent>(uid);
-            _alertsSystem.ClearAlert(uid, AlertType.VowBroken);
-            _alertsSystem.ShowAlert(uid, AlertType.VowOfSilence);
+            _alertsSystem.ClearAlert(uid, mimePowers.VowAlert);
+            _alertsSystem.ShowAlert(uid, mimePowers.VowBrokenAlert);
             _actionsSystem.AddAction(uid, ref mimePowers.InvisibleWallActionEntity, mimePowers.InvisibleWallAction, uid);
         }
     }

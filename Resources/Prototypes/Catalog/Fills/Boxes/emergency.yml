@@ -12,6 +12,7 @@
       - id: EmergencyMedipen
       - id: Flare
       - id: FoodPSB # Nyanotrasen - Replace Tinned Meat with PSB
+      - id: DrinkWaterBottleFull
   - type: Sprite
     layers:
       - state: internals
@@ -22,6 +23,7 @@
   parent: BoxCardboard
   id: BoxSurvivalEngineering
   description: It's a box with basic internals inside. This one is labelled to contain an extended-capacity tank.
+  suffix: Engineering
   components:
   - type: StorageFill
     contents:
@@ -31,6 +33,7 @@
       - id: EmergencyMedipen
       - id: Flare
       - id: FoodPSB # Nyanotrasen - Replace Tinned Meat with PSB
+      - id: DrinkWaterBottleFull
   - type: Sprite
     layers:
       - state: internals
@@ -51,6 +54,7 @@
       - id: EmergencyMedipen
       - id: Flare
       - id: FoodPSB # Nyanotrasen - Replace Tinned Meat with PSB
+      - id: DrinkWaterBottleFull
   - type: Sprite
     layers:
       - state: internals
@@ -71,6 +75,7 @@
       - id: EmergencyMedipen
       - id: EmergencyMedipen
       - id: FoodPSB # Nyanotrasen - Replace Tinned Meat with PSB
+      - id: DrinkWaterBottleFull
   - type: Sprite
     layers:
       - state: internals
@@ -91,6 +96,7 @@
       - id: EmergencyMedipen
       - id: Flare
       - id: FoodPSB # Nyanotrasen - Replace Tinned Meat with PSB
+      - id: DrinkWaterBottleFull
   - type: Sprite
     layers:
       - state: internals
@@ -101,6 +107,7 @@
   parent: BoxCardboard
   id: BoxHug
   description: A special box for sensitive people.
+  suffix: Emergency
   components:
   - type: Sprite
     layers:
@@ -111,11 +118,12 @@
   - type: StorageFill
     contents:
       - id: ClothingMaskBreath
-      - id: EmergencyOxygenTankFilled
+      - id: EmergencyFunnyOxygenTankFilled
       - id: SpaceMedipen
       - id: EmergencyMedipen
       - id: Flare
       - id: FoodPSB # Nyanotrasen - Replace Tinned Meat with PSB
+      - id: DrinkWaterBottleFull
   - type: Tag
     tags:
       - BoxHug
@@ -125,15 +133,16 @@
   parent: BoxCardboard
   id: BoxSurvivalSyndicate
   description: It's a box with basic internals inside. This one is labelled to contain an extended-capacity tank.
+  suffix: Syndicate
   components:
   - type: StorageFill
     contents:
       - id: ClothingMaskGasSyndicate
       - id: ExtendedEmergencyOxygenTankFilled
-      - id: SpaceMedipen
       - id: EmergencyMedipen
       - id: Flare
-      - id: FoodTinMRE
+      - id: FoodPSB # Nyanotrasen - Replace Tinned Meat with PSB
+      - id: DrinkWaterBottleFull
   - type: Sprite
     layers:
       - state: internals

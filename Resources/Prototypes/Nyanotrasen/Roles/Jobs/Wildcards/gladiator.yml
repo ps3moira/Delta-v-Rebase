@@ -11,8 +11,9 @@
   setPreference: true
 #  whitelistRequired: true
   requirements:
-    - !type:OverallPlaytimeRequirement
-      time: 3600
+    - !type:DepartmentTimeRequirement
+      department: Security
+      time: 21600
   special:
   - !type:AddComponentSpecial
     components:
@@ -26,9 +27,6 @@
 - type: startingGear
   id: NyanoGladiatorGear
   equipment:
-    jumpsuit: ClothingUniformJumpsuitGladiator
-    outerClothing: ClothingOuterArmorGladiator
     id: GladiatorPDA
     ears: ClothingHeadsetGrey
-  innerClothingSkirt: UniformShortsRedWithTop
   #any other possessions, spawn in cell

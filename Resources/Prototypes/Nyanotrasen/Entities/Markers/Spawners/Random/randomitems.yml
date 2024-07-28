@@ -35,10 +35,14 @@
       - ShardGlass
       - ShardGlassReinforced
       - ShardGlassPlasma
+      - ShardGlassUranium
       - MaterialCloth1
       - MaterialDurathread1
       - MaterialWoodPlank1
-      - MaterialCotton
+      - MaterialCotton1
+      - MaterialCardboard1
+      - MaterialWebSilk1
+      - MaterialBones1
       - SheetPlastic1
       - SheetSteel1
       - SheetGlass1
@@ -47,6 +51,7 @@
       - BriefcaseBrown
       - Floodlight
       - MonkeyCubeWrapped
+      - KoboldCubeWrapped
       - SpaceCash
       - SpaceCash10
       - Torch
@@ -61,12 +66,26 @@
       - ColoredLightTubeFrostyBlue
       - ColoredLightTubeBlackLight
       - LightBulbMaintenanceRed
+      - LightBulbBroken
+      - LightTubeBroken
+      - LedLightBulb
+      - LightBulbOld
+      - LightTubeOld
+      - ServiceLightBulb
+      - LightTubeCrystalCyan
+      - LightTubeCrystalBlue
+      - LightTubeCrystalPink
+      - LightTubeCrystalOrange
+      - LightTubeCrystalRed
+      - LightTubeCrystalGreen
       - PowerCellPotato
       - PowerCellSmallPrinted
       - ChemistryEmptyBottle03
       - LargeBeaker
+      - BaseChemistryEmptyVial
       - Syringe
-      - BodyBag_Folded
+      - Dropper
+      - BodyBagFolded
       - SprayBottle
       - SprayBottleWater
       - SprayBottleSpaceCleaner
@@ -75,8 +94,6 @@
       - GroundTobacco
       - Bucket
       - Flare
-      #- StrangePill
-      #- FlashlightLantern
       - GlowstickBase
       - GlowstickRed
       - GlowstickPurple
@@ -84,10 +101,7 @@
       - GlowstickBlue
       - HandLabeler
       - Lantern
-      #- Lighter
       - CheapLighter
-      #- Matchbox
-      #- Shovel
       - trayScanner
       - ClothingMaskGas
       - ClothingMaskBreathMedical
@@ -114,12 +128,41 @@
       - ClothingShoesTourist
       - ClothingUnderSocksBee
       - ClothingUnderSocksCoder
+      - CarvedPumpkinSmall
+      - CarvedPumpkinLarge
+      - DartBlue
+      - DartPurple
+      - DartYellow
+      - CandleRed
+      - CandleBlue
+      - CandleBlack
+      - CandleGreen
+      - CandlePurple
+      - BlankHandyFlag
+      - LGBTQHandyFlag
+      - PirateHandyFlag
+      - Fork
+      - Spoon
+      - KnifePlastic
+      - FishLabeler
+      - SnapPop
+      - ShardCrystalRandom
+      - Coal1
+      - Salt1
+      - BarberScissors
+      - RagItem
+      - Plunger
+      - LightReplacerEmpty
+      - FlippoLighter
+      - RollingPin
     chance: 0.75
     rarePrototypes:
       - CigCartonGreen
       - CigCartonRed
       - CigCartonBlue
       - CigCartonBlack
+      - CigCartonPurple # DeltaV
+      - CigCartonCandy # DeltaV
       - Joint
       - Blunt
       - CigarGold
@@ -127,27 +170,38 @@
       - SmokingPipeFilledCannabis
       - DiceBag
       - PersonalAI
+      - PotatoAI
       - PartRodMetal
       - IngotSilver1
       - CigarGold
       - IngotGold1
       - GoldOre1
+      - SilverOre1
       - SteelOre1
       - PlasmaOre1
       - SpaceQuartz1
       - UraniumOre1
+      - BananiumOre1
       - SheetUranium1
       - SheetPlasma1
       - SheetPlasteel1
       - SheetPGlass1
+      - SheetUGlass1
+      - MaterialSheetMeat1
+      - MaterialBiomass1
+      - MaterialBananium1
+      - MaterialBluespace1
       - Cablecuffs
       - Zipties
       - MonkeyCubeBox
+      - KoboldCubeBox
+      - VariantCubeBox
       - SpaceCash100
       - PowerCellSmall
       - PowerCellMediumPrinted
       - WoodenBuckler
       - MakeshiftShield
+      - WebShield
       - DehydratedSpaceCarp
       - RobustHarvestChemistryBottle
       - UnstableMutagenChemistryBottle
@@ -158,7 +212,8 @@
       - Brutepack
       - Gauze
       - AloeCream
-      # Pills/Syringes???
+      - StrangePill
+      - PillCanisterRandom
       - Medkit
       - MedkitBurn
       - MedkitToxin
@@ -179,6 +234,7 @@
       - FlashlightSeclite
       - HandheldGPSBasic
       - JetpackBlue
+      - JetpackMini
       - LanternFlash
       - ToolboxArtistic
       - Bola
@@ -192,4 +248,29 @@
       - ClothingHandsGlovesNitrile
       - ClothingOuterStraightjacket
       - ClothingShoesGaloshes
+      - HypoDart
+      - MrChips
+      - MrDips
+      - ProximitySensor
+      - GeigerCounter
+      - DefaultStationBeaconUnanchored
+      - HandheldStationMap
+      - BananiumHorn
+      - SnapPopBox
+      - MaterialGunpowder
+      - ShardGlassClockwork
+      - EggSpider
+      - EvidenceMarkerThree
+      - EvidenceMarkerSeven
+      - EvidenceMarkerNine
+      - MothroachCube
+      - MouseCube
+      - CockroachCube
+      - SpaceTickCube
+      - GoatCube
+      - CowCube
+      - WeaponMeleeNeedle
+      - WhiteCane
+      - CleanerGrenade
+      - GrenadeDummy
     rareChance: 0.05

@@ -1,4 +1,4 @@
-﻿- type: constructionGraph
+- type: constructionGraph
   id: Cyborg
   start: start
   graph:
@@ -22,13 +22,6 @@
       - assemblyId: generic
         guideString: borg-construction-guide-string
 
-      - component: PowerCell
-        name: power cell
-        store: cell_slot
-        icon:
-          sprite: Objects/Power/power_cells.rsi
-          state: small
-
       - material: Cable
         amount: 1
         doAfter: 1
@@ -43,7 +36,7 @@
 
       - component: Flash
         name: second flash
-        store: part-contaiener
+        store: part-container
         icon:
           sprite: Objects/Weapons/Melee/flash.rsi
           state: flash
@@ -55,13 +48,6 @@
       steps:
       - assemblyId: engineer
         guideString: borg-construction-guide-string
-
-      - component: PowerCell
-        name: power cell
-        store: cell_slot
-        icon:
-          sprite: Objects/Power/power_cells.rsi
-          state: small
 
       - material: Cable
         amount: 1
@@ -90,13 +76,6 @@
       - assemblyId: janitor
         guideString: borg-construction-guide-string
 
-      - component: PowerCell
-        name: power cell
-        store: cell_slot
-        icon:
-          sprite: Objects/Power/power_cells.rsi
-          state: small
-
       - material: Cable
         amount: 1
         doAfter: 1
@@ -123,13 +102,6 @@
       steps:
       - assemblyId: medical
         guideString: borg-construction-guide-string
-
-      - component: PowerCell
-        name: power cell
-        store: cell_slot
-        icon:
-          sprite: Objects/Power/power_cells.rsi
-          state: small
 
       - material: Cable
         amount: 1
@@ -158,13 +130,6 @@
       - assemblyId: mining
         guideString: borg-construction-guide-string
 
-      - component: PowerCell
-        name: power cell
-        store: cell_slot
-        icon:
-          sprite: Objects/Power/power_cells.rsi
-          state: small
-
       - material: Cable
         amount: 1
         doAfter: 1
@@ -192,13 +157,6 @@
       - assemblyId: service
         guideString: borg-construction-guide-string
 
-      - component: PowerCell
-        name: power cell
-        store: cell_slot
-        icon:
-          sprite: Objects/Power/power_cells.rsi
-          state: small
-
       - material: Cable
         amount: 1
         doAfter: 1
@@ -221,6 +179,55 @@
       - tool: Screwing
         doAfter: 0.5
 
+
+    - to: security # Delta-V Security Borg Start
+      steps:
+      - assemblyId: security
+        guideString: borg-construction-guide-string
+
+      - material: Cable
+        amount: 1
+        doAfter: 1
+        store: part-container
+
+      - component: Flash
+        name: flash
+        store: part-container
+        icon:
+          sprite: Objects/Weapons/Melee/flash.rsi
+          state: flash
+
+      - component: Flash
+        name: second flash
+        store: part-container
+        icon:
+          sprite: Objects/Weapons/Melee/flash.rsi
+          state: flash
+
+      - tool: Screwing
+        doAfter: 2
+
+      - material: Plasteel
+        amount: 2
+        doAfter: 1
+        store: part-container
+
+      - tool: Welding
+        doAfter: 2
+
+      - tag: BorgSecurityArmour
+        name: one of security's armour vests
+        store: part-container
+        icon:
+          sprite: DeltaV/Clothing/OuterClothing/Armor/platecarrier.rsi
+          state: icon
+
+      - tool: Cutting
+        doAfter: 1
+
+      - tool: Welding
+        doAfter: 2 # Delta-V : End
+
   - node: cyborg
     entity: BorgChassisGeneric
 
@@ -238,3 +245,15 @@
 
   - node: service
     entity: BorgChassisService
+
+  - node: security # Delta-V Security Borg
+    entity: BorgChassisSecurity # Delta-V Security Borg
+
+  - node: syndicateassault
+    entity: BorgChassisSyndicateAssault
+
+  - node: syndicatemedical
+    entity: BorgChassisSyndicateMedical
+
+  - node: syndicatesaboteur
+    entity: BorgChassisSyndicateSaboteur

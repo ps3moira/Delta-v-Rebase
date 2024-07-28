@@ -18,7 +18,7 @@
           radius: 0.1
         density: 190
         mask:
-        - Impassable
+        - HighImpassable
   - type: Sprite
     drawdepth: Overdoors
     offset: "0.0,0.3"
@@ -229,40 +229,52 @@
 - type: entity
   id: PottedPlantRD #PottedPlant25
   parent: PottedPlantBase
-  name: "RD's potted plant"
-  description: "A gift from the botanical staff, presented after the RD's reassignment. There's a tag on it that says \"Y'all come back now, y'hear?\"\nIt doesn't look very healthy..."
+  # DeltaV - Epistemics Department - Replace Research Director with Mystagogue
+  name: Mystagogue's potted plant
+  description: "A gift from the botanical staff, presented after the Mystagogue's reassignment. There's a tag on it that says \"Y'all come back now, y'hear?\"\nIt doesn't look very healthy..."
+  # End of modified code
   components:
   - type: Sprite
     state: plant-25
+  - type: StealTarget
+    stealGroup: PlantRD
 
-#these are all the plastic plants. They inherit from the first one because they don't have
-#enough differences to warrant getting a unique abstract prototype. It's just the name and description.
 - type: entity
   id: PottedPlant26
   parent: PottedPlantBase
-  name: plastic potted plant
-  description: A fake, cheap looking, plastic tree. Perfect for people who kill every plant they touch.
+  description: Is it just me, or is it blinking?
   components:
   - type: Sprite
     state: plant-26
 
+#these are all the plastic plants. They inherit from the first one because they don't have
+#enough differences to warrant getting a unique abstract prototype. It's just the name and description.
 - type: entity
   id: PottedPlant27
-  parent: PottedPlant26
+  parent: PottedPlantBase
+  name: plastic potted plant
+  description: A fake, cheap looking, plastic tree. Perfect for people who kill every plant they touch.
   components:
   - type: Sprite
     state: plant-27
 
 - type: entity
   id: PottedPlant28
-  parent: PottedPlant26
+  parent: PottedPlant27
   components:
   - type: Sprite
     state: plant-28
 
 - type: entity
   id: PottedPlant29
-  parent: PottedPlant26
+  parent: PottedPlant27
   components:
   - type: Sprite
     state: plant-29
+
+- type: entity
+  id: PottedPlant30
+  parent: PottedPlant27
+  components:
+  - type: Sprite
+    state: plant-30

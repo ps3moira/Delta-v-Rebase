@@ -6,26 +6,29 @@
   - type: StorageFill
     contents:
       - id: BoxSurvival
-        amount: 1
-      - id: ClothingOuterArmorBasic
-        amount: 1
       - id: WeaponSubMachineGunTypewriter
-        amount: 1
       - id: WeaponPistolViperWood
-        amount: 1
-#      - id: MagazinePistol # Ammo is too expensive nowadays (it causes test fails)
-#        amount: 1
-#      - id: BaseBallBat # THIS BAT IS TOO DAMN BIG!
-#        amount: 1
+      - id: MagazinePistol
+      - id: BaseBallBat
 
 - type: entity
   noSpawn: true
   parent: ClothingBackpackMedical
-  id: ClothingBackpackParamedicFilled
+  id: ClothingBackpackParamedicFilledDV
   components:
   - type: StorageFill
     contents:
       - id: BoxSurvivalMedical
       - id: EmergencyRollerBedSpawnFolded
-      - id: BodyBag_Folded
+      - id: BodyBagFolded
       - id: Portafib
+
+- type: entity
+  noSpawn: true
+  parent: ClothingBackpackMedical
+  id: ClothingBackpackPsychologistFilled
+  components:
+  - type: StorageFill
+    contents:
+    - id: BoxSurvivalMedical
+    - id: RubberStampPsychologist

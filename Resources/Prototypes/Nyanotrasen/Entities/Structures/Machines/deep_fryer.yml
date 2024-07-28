@@ -105,7 +105,7 @@
       - Cornoil
       - OilGhee
       - OilOlive
-    #unsafeOilVolumeEffects: #Can't pass UninitializedSaveTest. Modifies itself on spawn. Very weird. 
+    #unsafeOilVolumeEffects: #Can't pass UninitializedSaveTest. Modifies itself on spawn. Very weird.
     #- !type:AreaReactionEffect
     #  duration: 10
     #  prototypeId: Smoke
@@ -124,15 +124,14 @@
   - type: RefillableSolution
     solution: vat_oil
   - type: Drink
-    isOpen: true
     solution: vat_oil
   - type: Appearance
   - type: ActivatableUI
     key: enum.DeepFryerUiKey.Key
   - type: UserInterface
     interfaces:
-    - key: enum.DeepFryerUiKey.Key
-      type: DeepFryerBoundUserInterface
+      enum.DeepFryerUiKey.Key:
+        type: DeepFryerBoundUserInterface
   - type: Destructible
     thresholds:
     - trigger:
@@ -143,7 +142,7 @@
         acts: ["Destruction"]
       - !type:PlaySoundBehavior
         sound:
-          path: /Audio/Effects/metalbreak.ogg
+          collection: MetalBreak
       - !type:SpillBehavior
         solution: vat_oil
       - !type:SpawnEntitiesBehavior

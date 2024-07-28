@@ -1,4 +1,4 @@
-﻿using Content.Server.Administration;
+using Content.Server.Administration;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
 using Content.Shared.Info;
@@ -47,20 +47,16 @@ public sealed class ShowRulesCommand : IConsoleCommand
             }
         }
 
-        var locator = IoCManager.Resolve<IPlayerLocator>();
-        var located = await locator.LookupIdByNameOrIdAsync(target);
-        if (located == null)
+
+        var message = new ShowRulesPopupMessage { PopupTime = seconds };
+
+        if (!IoCManager.Resolve<IPlayerManager>().TryGetSessionByUsername(target, out var player))
         {
             shell.WriteError("Unable to find a player with that name.");
-            return;
+           return;
         }
 
         var netManager = IoCManager.Resolve<INetManager>();
-
-        var message = new SharedRulesManager.ShowRulesPopupMessage();
-        message.PopupTime = seconds;
-
-        var player = IoCManager.Resolve<IPlayerManager>().GetSessionByUserId(located.UserId);
-        netManager.ServerSendMessage(message, player.ConnectedClient);
+        netManager.ServerSendMessage(message, player.Channel);
     }
 }

@@ -1,8 +1,8 @@
 using Content.Shared.Abilities.Psionics;
-using Content.Shared.Vehicle.Components;
 using Content.Server.Abilities.Psionics;
 using Content.Shared.Eye;
 using Content.Server.NPC.Systems;
+using Content.Shared.NPC.Systems;
 using Robust.Shared.Containers;
 using Robust.Server.GameObjects;
 
@@ -87,8 +87,6 @@ namespace Content.Server.Psionics
             _visibilitySystem.AddLayer(uid, visibility, (int) VisibilityFlags.PsionicInvisibility, false);
             _visibilitySystem.RemoveLayer(uid, visibility, (int) VisibilityFlags.Normal, false);
             _visibilitySystem.RefreshVisibility(uid, visibility);
-
-            SetCanSeePsionicInvisiblity(uid, true);
         }
 
 
@@ -100,15 +98,10 @@ namespace Content.Server.Psionics
                 _visibilitySystem.AddLayer(uid, visibility, (int) VisibilityFlags.Normal, false);
                 _visibilitySystem.RefreshVisibility(uid, visibility);
             }
-            if (HasComp<PotentialPsionicComponent>(uid) && !HasComp<PsionicInsulationComponent>(uid))
-                SetCanSeePsionicInvisiblity(uid, false);
         }
 
         private void OnEyeInit(EntityUid uid, EyeComponent component, ComponentInit args)
         {
-            if (HasComp<PotentialPsionicComponent>(uid) || HasComp<VehicleComponent>(uid))
-                return;
-
             //SetCanSeePsionicInvisiblity(uid, true); //JJ Comment - Not allowed to modifies .yml on spawn any longer. See UninitializedSaveTest.
         }
         private void OnEntInserted(EntityUid uid, PsionicallyInvisibleComponent component, EntInsertedIntoContainerMessage args)
@@ -133,7 +126,7 @@ namespace Content.Server.Psionics
             {
                 if (EntityManager.TryGetComponent(uid, out EyeComponent? eye))
                 {
-                    //_eye.SetVisibilityMask(uid, eye.VisibilityMask & (int) VisibilityFlags.PsionicInvisibility, eye);
+                    _eye.SetVisibilityMask(uid, eye.VisibilityMask & ~ (int) VisibilityFlags.PsionicInvisibility, eye);
                 }
             }
         }

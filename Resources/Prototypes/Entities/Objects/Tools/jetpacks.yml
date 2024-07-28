@@ -37,10 +37,10 @@
       state: icon
     - type: Item
       sprite: Objects/Tanks/Jetpacks/blue.rsi
-      size: 100
+      size: Huge
     - type: UserInterface
       interfaces:
-        - key: enum.SharedGasTankUiKey.Key
+        enum.SharedGasTankUiKey.Key:
           type: GasTankBoundUserInterface
     - type: Clothing
       sprite: Objects/Tanks/Jetpacks/blue.rsi
@@ -60,7 +60,6 @@
 #    - type: DynamicPrice
 #      price: 100
     - type: ReverseEngineering # Nyano
-      generic: true
       difficulty: 3
       recipes:
         - JetpackBlue
@@ -69,7 +68,6 @@
   id: ActionToggleJetpack
   name: Toggle jetpack
   description: Toggles the jetpack, giving you movement outside the station.
-  noSpawn: true
   components:
   - type: InstantAction
     icon:
@@ -158,12 +156,15 @@
     sprite: Objects/Tanks/Jetpacks/captain.rsi
     slots:
       - Back
+      - SuitStorage
   - type: Item
     sprite: Objects/Tanks/Jetpacks/captain.rsi
-    size: 30
+    size: Normal
   - type: Tag
     tags:
     - HighRiskItem
+  - type: StealTarget
+    stealGroup: JetpackCaptainFilled
 
 # Filled captain
 - type: entity
@@ -198,6 +199,7 @@
       slots:
         - Back
         - suitStorage
+        - Belt
     - type: GasTank
       outputPressure: 42.6
       air:
@@ -273,6 +275,11 @@
     slots:
       - Back
       - suitStorage
+      - Belt
+  - type: ReverseEngineering # DeltaV - make void jetpack RE'able
+    difficulty: 4
+    recipes:
+    - JetpackVoid
 
 # Filled void
 - type: entity

@@ -45,10 +45,14 @@ public sealed class StealthClothingSystem : EntitySystem
         if (MetaData(user).EntityLifeStage >= EntityLifeStage.Terminating)
             return false;
 
+        // can't enable stealth if something else already enabled it, and vice versa
+        var stealth = EnsureComp<StealthComponent>(user);
+        if (stealth.Enabled == enabled)
+            return false;
+
         comp.Enabled = enabled;
         Dirty(uid, comp);
 
-        var stealth = EnsureComp<StealthComponent>(user);
         // slightly visible, but doesn't change when moving so it's ok
         var visibility = enabled ? stealth.MinVisibility + comp.Visibility : stealth.MaxVisibility;
         _stealth.SetVisibility(user, visibility, stealth);
@@ -114,7 +118,7 @@ public sealed class StealthClothingSystem : EntitySystem
 /// <summary>
 /// Raised on the stealth clothing when attempting to add an action.
 /// </summary>
-public class AddStealthActionEvent : CancellableEntityEventArgs
+public sealed class AddStealthActionEvent : CancellableEntityEventArgs
 {
     /// <summary>
     /// User that equipped the stealth clothing.
@@ -130,7 +134,7 @@ public class AddStealthActionEvent : CancellableEntityEventArgs
 /// <summary>
 /// Raised on the stealth clothing when the user is attemping to enable it.
 /// </summary>
-public class AttemptStealthEvent : CancellableEntityEventArgs
+public sealed class AttemptStealthEvent : CancellableEntityEventArgs
 {
     /// <summary>
     /// User that is attempting to enable the stealth clothing.

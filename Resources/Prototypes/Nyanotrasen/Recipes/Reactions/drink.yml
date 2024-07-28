@@ -1,18 +1,16 @@
 - type: reaction
-  id: BahamaMama
+  id: Lean
   reactants:
-    Rum:
+    GrapeSoda:
       amount: 1
-    Grenadine:
+    Diphenhydramine:
       amount: 1
-    JuiceOrange:
+    Impedrezene:
       amount: 1
-    JuicePineapple:
-      amount: 1
-    Ice:
+    FourteenLoko:
       amount: 1
   products:
-      BahamaMama: 5
+    Lean: 4
 
 - type: reaction
   id: OrangeCreamice

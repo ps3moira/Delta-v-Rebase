@@ -5,7 +5,7 @@
   name: mail-item-name-unaddressed
   components:
   - type: Item
-    size: 20
+    size: Normal
   - type: Mail
   - type: AccessReader
   - type: Sprite
@@ -77,7 +77,7 @@
     - trigger:
         !type:DamageTrigger
         damage: 5
-        triggersOnce: true
+        #triggersOnce: true
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Breakage" ]
@@ -92,10 +92,6 @@
     damage:
       types:
         Blunt: 10
-  - type: DamageOtherOnHit
-    damage:
-      types:
-        Blunt: 5
 
 # This empty parcel is allowed to exist and evade the tests for the admin
 # mailto command.

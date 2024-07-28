@@ -18,10 +18,22 @@
     openSound:
       path: /Audio/Effects/woodenclosetopen.ogg
 
+# Basic
+- type: entity
+  id: LockerSteel
+  parent: LockerBaseSecure
+  name: secure closet
+  components:
+  - type: Appearance
+  - type: EntityStorageVisuals
+    stateBaseClosed: secure
+    stateDoorOpen: secure_open
+    stateDoorClosed: secure_door
+
 # Cargo
 - type: entity
   id: LockerQuarterMaster
-  parent: LockerBase
+  parent: LockerBaseSecure
   name: logistics officer's locker # DeltaV - Logistics Department replacing Cargo
   components:
   - type: Appearance
@@ -156,7 +168,7 @@
     stateDoorOpen: freezer_open
     stateDoorClosed: freezer_door
   - type: ExplosionResistance
-    damageCoefficient: 0.01
+    damageCoefficient: 0.50
   - type: AntiRottingContainer
 
 - type: entity
@@ -321,7 +333,7 @@
     stateDoorOpen: armory_open
     stateDoorClosed: brigmedic_door
   - type: AccessReader
-    access: [["Medical"]]
+    access: [["Corpsman"]] # DeltaV - add corpsman access
 
 # Security Officer
 - type: entity
@@ -367,7 +379,7 @@
   description: To store bags of bullet casings and detainee belongings.
   components:
   - type: AccessReader
-    access: [["Security"]]
+    access: [["Security"], ["Prosecutor"]] # DeltaV - allow Pros access to Evidence
 
 # Syndicate
 - type: entity
@@ -416,7 +428,7 @@
   components:
   - type: Appearance
   - type: AccessReader
-    access: [["Theatre"]]
+    access: [["Clown"]] # DeltaV - clown access
   - type: EntityStorageVisuals
     stateBaseClosed: clown
     stateDoorOpen: clown_open
@@ -430,7 +442,7 @@
   components:
   - type: Appearance
   - type: AccessReader
-    access: [["Theatre"]]
+    access: [["Mime"]] # DeltaV - mime access
   - type: EntityStorageVisuals
     stateBaseClosed: mime
     stateDoorOpen: mime_open

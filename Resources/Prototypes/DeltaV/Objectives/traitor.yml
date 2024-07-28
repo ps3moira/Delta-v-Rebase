@@ -1,27 +1,24 @@
 - type: entity # Logistics Officer steal objective.
-  noSpawn: true
   parent: BaseTraitorStealObjective
   id: LOLuckyBillStealObjective
   components:
   - type: NotJobRequirement
     job: Quartermaster
   - type: StealCondition
-    prototype: SpaceCashLuckyBill
+    stealGroup: SpaceCashLuckyBill
     # owner: job-name-qm
 
 - type: entity # Head of Personnel steal objective.
-  noSpawn: true
   parent: BaseTraitorStealObjective
   id: HoPBookIanDossierStealObjective
   components:
   - type: NotJobRequirement
     job: HeadOfPersonnel
   - type: StealCondition
-    prototype: BookIanDossier
+    stealGroup: BookIanDossier
     # owner: job-name-hop
 
 - type: entity # Head of Security steal objective.
-  noSpawn: true
   parent: BaseTraitorStealObjective
   id: HoSGunStealObjective
   components:
@@ -30,5 +27,18 @@
   - type: NotJobRequirement
     job: HeadOfSecurity
   - type: StealCondition
-    prototype: WeaponEnergyGunMultiphase
+    stealGroup: WeaponEnergyGunMultiphase
     owner: job-name-hos
+
+- type: entity # Clerk steal objective.
+  noSpawn: true
+  parent: BaseTraitorStealObjective
+  id: ClerkNotaryStealObjective
+  components:
+  - type: NotJobRequirement
+    job: Clerk
+  - type: StealCondition
+    stealGroup: RubberStampNotary
+    owner: job-name-clerk
+
+

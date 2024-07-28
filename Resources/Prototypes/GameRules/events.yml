@@ -43,28 +43,41 @@
     minimumPlayers: 15
   - type: BreakerFlipRule
 
-# - type: entity
-#   id: BureaucraticError # DeltaV - Prevent the BureaucraticError event to happen.
-#   parent: BaseGameRule
-#   noSpawn: true
-#   components:
-#   - type: StationEvent
-#     startAnnouncement: station-event-bureaucratic-error-announcement
-#     minimumPlayers: 25
-#     weight: 5
-#     duration: 1
-#   - type: BureaucraticErrorRule
+- type: entity
+  id: BureaucraticError
+  parent: BaseGameRule
+  noSpawn: true
+  components:
+  - type: StationEvent
+    startAnnouncement: station-event-bureaucratic-error-announcement
+    minimumPlayers: 25
+    weight: 5
+    duration: 1
+  - type: BureaucraticErrorRule
 
-#- type: entity
-#  parent: BaseGameRule # DeltaV - this shit is busted most of the time
-#  id: ClosetSkeleton
-#  noSpawn: true
-#  components:
-#  - type: StationEvent
-#    weight: 10
-#    duration: 1
-#  - type: RandomEntityStorageSpawnRule
-#    prototype: MobSkeletonCloset
+- type: entity
+  id: ClericalError
+  parent: BaseGameRule
+  noSpawn: true
+  components:
+  - type: StationEvent
+    startAnnouncement: station-event-clerical-error-announcement
+    minimumPlayers: 15
+    weight: 5
+    duration: 1
+  - type: ClericalErrorRule
+
+- type: entity
+  parent: BaseGameRule
+  id: ClosetSkeleton
+  noSpawn: true
+  components:
+  - type: StationEvent
+    weight: 8 # DeltaV - was 10
+    duration: 1
+    minimumPlayers: 10
+  - type: RandomEntityStorageSpawnRule
+    prototype: MobSkeletonCloset
 
 - type: entity
   parent: BaseGameRule
@@ -72,13 +85,29 @@
   noSpawn: true
   components:
   - type: StationEvent
-    weight: 1 # DeltaV - was 5
-    duration: 1
-    earliestStart: 45
-    reoccurrenceDelay: 60
-    minimumPlayers: 20
-  - type: RandomSpawnRule
-    prototype: SpawnPointGhostDragon
+    weight: 1 # DeltaV - was 6.5
+    earliestStart: 60 # DeltaV - was 40
+    reoccurrenceDelay: 20
+    minimumPlayers: 45 # DeltaV - was 20
+  - type: AntagRandomSpawn
+  - type: AntagSpawner
+    prototype: MobDragon
+  - type: AntagObjectives
+    objectives:
+    - CarpRiftsObjective
+    - DragonSurviveObjective
+  - type: AntagSelection
+    agentName: dragon-round-end-agent-name
+    definitions:
+    - spawnerPrototype: SpawnPointGhostDragon
+      min: 1
+      max: 1
+      pickPlayer: false
+      mindComponents:
+      - type: DragonRole
+        prototype: Dragon
+      - type: RoleBriefing
+        briefing: dragon-role-briefing
 
 - type: entity
   parent: BaseGameRule
@@ -128,7 +157,7 @@
     endAnnouncement: station-event-gas-leak-end-announcement
     earliestStart: 10
     minimumPlayers: 5
-    weight: 5
+    weight: 10
     startDelay: 20
   - type: GasLeakRule
 
@@ -139,7 +168,7 @@
   components:
   - type: StationEvent
     earliestStart: 15
-    minimumPlayers: 15
+    minimumPlayers: 10 # DeltaV - Was 15
     weight: 5
     startDelay: 50
     duration: 240
@@ -170,8 +199,12 @@
   noSpawn: true
   components:
   - type: StationEvent
-    earliestStart: 30
-    minimumPlayers: 35
+    startAnnouncement: station-event-vent-creatures-start-announcement
+    startAudio:
+      path: /Audio/Announcements/attention.ogg
+    startDelay: 10
+    earliestStart: 20 #DeltaV - was 30
+    minimumPlayers: 25 #DeltaV - was 35
     weight: 5
     duration: 50
   - type: VentCrittersRule
@@ -182,9 +215,36 @@
       prob: 0.02
     - id: MobMouse2
       prob: 0.02
-    specialEntries:
-    - id: SpawnPointGhostRatKing
-      prob: 0.005
+    #- id: MobMouseCancer
+    #  prob: 0.001
+# Events always spawn a critter regardless of Probability https://github.com/space-wizards/space-station-14/issues/28480 I added the Rat King to their own event with a player cap.
+
+# DeltaV - Rat King spawns under MidRoundAntag - Comment out Rat King from spawning with MouseMigration gamerule
+#- type: entity
+#  id: KingRatMigration
+#  parent: BaseStationEventShortDelay
+#  components:
+#  - type: StationEvent
+#    startAnnouncement: station-event-vent-creatures-start-announcement
+#    startAudio:
+#      path: /Audio/Announcements/attention.ogg
+#    earliestStart: 15
+#    weight: 6
+#    duration: 50
+#    minimumPlayers: 15 # Hopefully this is enough for the Rat King's potential Army
+#  - type: VentCrittersRule
+#    entries:
+#    - id: MobMouse
+#      prob: 0.02
+#    - id: MobMouse1
+#      prob: 0.02
+#    - id: MobMouse2
+#      prob: 0.02
+#    - id: MobMouseCancer
+#      prob: 0.001
+#    specialEntries:
+#    - id: SpawnPointGhostRatKing
+#      prob: 0.001
 
 - type: entity
   id: CockroachMigration
@@ -192,6 +252,10 @@
   noSpawn: true
   components:
   - type: StationEvent
+    startAnnouncement: station-event-vent-creatures-start-announcement
+    startAudio:
+      path: /Audio/Announcements/attention.ogg
+    startDelay: 10
     weight: 5
     duration: 50
   - type: VentCrittersRule
@@ -219,18 +283,6 @@
     maxDuration: 120
   - type: PowerGridCheckRule
 
-# - type: entity # DeltaV - Removes the random sentience.
-#   id: RandomSentience
-#   parent: BaseGameRule
-#   noSpawn: true
-#   components:
-#   - type: StationEvent
-#     weight: 10
-#     duration: 1
-#     startAudio:
-#       path: /Audio/Announcements/attention.ogg
-#   - type: RandomSentienceRule
-
 - type: entity
   parent: BaseGameRule
   id: SolarFlare
@@ -256,7 +308,7 @@
     - Security
     - Service
     - Supply
-    extraCount: 2
+    extraCount: 3 # DeltaV - was 2
     lightBreakChancePerSecond: 0.0003
     doorToggleChancePerSecond: 0.001
 
@@ -269,9 +321,9 @@
     startAnnouncement: station-event-vent-clog-start-announcement
     startAudio:
       path: /Audio/Announcements/ventclog.ogg # DeltaV - custom announcer
-    earliestStart: 15
+    earliestStart: 20 # DeltaV - was 15
     minimumPlayers: 15
-    weight: 5
+    weight: 7.5 # DeltaV - was 5
     startDelay: 50
     duration: 60
   - type: VentClogRule
@@ -282,7 +334,10 @@
   noSpawn: true
   components:
   - type: StationEvent
-    id: VentCritters
+    startAnnouncement: station-event-vent-creatures-start-announcement
+    startAudio:
+      path: /Audio/Announcements/attention.ogg
+    startDelay: 10
     earliestStart: 15
     minimumPlayers: 15
     weight: 5
@@ -302,6 +357,10 @@
   noSpawn: true
   components:
   - type: StationEvent
+    startAnnouncement: station-event-vent-creatures-start-announcement
+    startAudio:
+      path: /Audio/Announcements/attention.ogg
+    startDelay: 10
     earliestStart: 20
     minimumPlayers: 15
     weight: 5
@@ -321,6 +380,10 @@
   noSpawn: true
   components:
   - type: StationEvent
+    startAnnouncement: station-event-vent-creatures-start-announcement
+    startAudio:
+      path: /Audio/Announcements/attention.ogg
+    startDelay: 10
     earliestStart: 20
     minimumPlayers: 15
     weight: 5
@@ -330,20 +393,24 @@
     - id: MobGiantSpiderAngry
       prob: 0.05
 
-# - type: entity # DeltaV - Prevent normal spawning of MobClownSpider
-#   id: SpiderClownSpawn
-#   parent: BaseGameRule
-#   noSpawn: true
-#   components:
-#   - type: StationEvent
-#     earliestStart: 20
-#     minimumPlayers: 15
-#     weight: 1
-#     duration: 60
-#   - type: VentCrittersRule
-#     entries:
-#     - id: MobClownSpider
-#       prob: 0.05
+- type: entity
+  id: SpiderClownSpawn
+  parent: BaseGameRule
+  noSpawn: true
+  components:
+  - type: StationEvent
+    startAnnouncement: station-event-vent-creatures-start-announcement
+    startAudio:
+      path: /Audio/Announcements/attention.ogg
+    startDelay: 10
+    earliestStart: 45 # DeltaV - was 20
+    minimumPlayers: 30 # DeltaV - was 15
+    weight: 1
+    duration: 60
+  - type: VentCrittersRule
+    entries:
+    - id: MobClownSpider
+      prob: 0.03 # DeltaV - was 0.05
 
 - type: entity
   id: ZombieOutbreak
@@ -352,27 +419,98 @@
   components:
   - type: StationEvent
     earliestStart: 90 # DeltaV - was 50
+    minimumPlayers: 15
     weight: 2.5 # DeltaV - was 5
     duration: 1
   - type: ZombieRule
-    minStartDelay: 0 #let them know immediately
-    maxStartDelay: 10
-    maxInitialInfected: 3 #fewer zombies
-    minInitialInfectedGrace: 300 #less time to prepare
-    maxInitialInfectedGrace: 450
+  - type: AntagSelection
+    definitions:
+    - prefRoles: [ InitialInfected ]
+      max: 4 # DeltaV - was 3
+      playerRatio: 10
+      blacklist:
+        components:
+        - ZombieImmune
+        - AntagImmune
+      briefing:
+        text: zombie-patientzero-role-greeting
+        color: Plum
+        sound: "/Audio/Ambience/Antag/zombie_start.ogg"
+      components:
+      - type: PendingZombie #less time to prepare than normal
+        minInitialInfectedGrace: 300
+        maxInitialInfectedGrace: 450
+      - type: ZombifyOnDeath
+      - type: IncurableZombie
+      - type: InitialInfected
+      mindComponents:
+      - type: InitialInfectedRole
+        prototype: InitialInfected
 
 - type: entity
-  id: LoneOpsSpawn
-  parent: BaseGameRule
   noSpawn: true
+  parent: BaseNukeopsRule
+  id: LoneOpsSpawn
   components:
   - type: StationEvent
-    earliestStart: 45
-    weight: 5
-    minimumPlayers: 10
+    earliestStart: 60 # DeltaV - was 45
+    weight: 3.5 # DeltaV - was 5
+    minimumPlayers: 30 # DeltaV - was 20
     reoccurrenceDelay: 30
     duration: 1
-  - type: LoneOpsSpawnRule
+  - type: RuleGrids
+  - type: LoadMapRule
+    preloadedGrid: ShuttleStriker
+  - type: NukeopsRule
+    roundEndBehavior: Nothing
+  - type: AntagSelection
+    definitions:
+    - spawnerPrototype: SpawnPointLoneNukeOperative
+      min: 1
+      max: 1
+      pickPlayer: false
+      startingGear: SyndicateLoneOperativeGearFull
+      components:
+      - type: NukeOperative
+      - type: RandomMetadata
+        nameSegments:
+        - SyndicateNamesPrefix
+        - SyndicateNamesNormal
+      - type: NpcFactionMember
+        factions:
+        - Syndicate
+      mindComponents:
+      - type: NukeopsRole
+        prototype: Nukeops
+
+- type: entity
+  noSpawn: true
+  parent: BaseTraitorRule
+  id: SleeperAgents
+  components:
+  - type: StationEvent
+    earliestStart: 30
+    weight: 5 # DeltaV - Was 8 now 5
+    minimumPlayers: 15
+    maxOccurrences: 1 # can only happen once per round
+    startAnnouncement: station-event-communication-interception
+    startAudio:
+      path: /Audio/Announcements/intercept.ogg
+    duration: null # the rule has to last the whole round not 1 second
+  - type: AlertLevelInterceptionRule
+  - type: AntagSelection
+    definitions:
+    - prefRoles: [ TraitorSleeper ]
+      fallbackRoles: [ Traitor ]
+      min: 1
+      max: 4 # DeltaV - Was 2 now 4
+      playerRatio: 10
+      blacklist:
+        components:
+        - AntagImmune
+      mindComponents:
+      - type: TraitorRole
+        prototype: TraitorSleeper
 
 - type: entity
   id: MassHallucinations
@@ -384,7 +522,7 @@
     duration: 150
     maxDuration: 300
   - type: MassHallucinationsRule
-    minTimeBetweenIncidents: 0.1
+    minTimeBetweenIncidents: 30 # DeltaV - was 0.1
     maxTimeBetweenIncidents: 300
     maxSoundDistance: 7
     sounds:
@@ -404,6 +542,31 @@
 #    earliestStart: 45
 #    minimumPlayers: 20
 #  - type: ImmovableRodRule
+#    rodPrototypes:
+#    - id: ImmovableRodKeepTilesStill
+#      prob: 0.95
+#      orGroup: rodProto
+#    - id: ImmovableRodMop
+#      prob: 0.0072
+#      orGroup: rodProto
+#    - id: ImmovableRodShark
+#      prob: 0.0072
+#      orGroup: rodProto
+#    - id: ImmovableRodClown
+#      prob: 0.0072
+#      orGroup: rodProto
+#    - id: ImmovableRodBanana
+#      prob: 0.0072
+#      orGroup: rodProto
+#    - id: ImmovableRodHammer
+#      prob: 0.0072
+#      orGroup: rodProto
+#    - id: ImmovableRodThrongler
+#      prob: 0.0072
+#      orGroup: rodProto
+#    - id: ImmovableRodGibstick
+#      prob: 0.0072
+#      orGroup: rodProto
 
 - type: entity
   noSpawn: true
@@ -411,11 +574,19 @@
   id: IonStorm
   components:
   - type: StationEvent
-    weight: 5
-    earliestStart: 20
-    reoccurrenceDelay: 60
-    startAnnouncement: station-event-ion-storm-start-announcement
-    startAudio:
-      path: /Audio/Announcements/attention.ogg # ion_storm.ogg does not use our announcer
+    weight: 10
+    reoccurrenceDelay: 30 #DeltaV - Was 20 #20 mins feels too short, and can scramble borgs way too much
     duration: 1
   - type: IonStormRule
+
+# DeltaV - Disable Mimic event. It causes a ton of heisentests, and does practially nothing in game
+#- type: entity
+#  id: MimicVendorRule
+#  parent: BaseGameRule
+#  noSpawn: true
+#  components:
+#    - type: StationEvent
+#      earliestStart: 0
+#      minimumPlayers: 20
+#      weight: 5
+#    - type: MobReplacementRule

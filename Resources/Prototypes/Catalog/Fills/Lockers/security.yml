@@ -8,8 +8,6 @@
       - id: FlashlightSeclite
       - id: WeaponDisabler
         prob: 0.3
-      - id: ClothingHeadHatWarden
-      - id: ClothingHeadHatBeretWarden
       - id: ClothingBeltSecurityFilled
       - id: Flash
       - id: ClothingEyesGlassesSecurity
@@ -22,8 +20,11 @@
       - id: DoorRemoteArmory
       - id: ClothingOuterHardsuitCombatWarden # DeltaV - ClothingOuterHardsuitWarden replaced in favour of warden's riot combat hardsuit.
       - id: HoloprojectorSecurity
-      - id: ClothingEyesHudSecurity
       - id: BoxPDAPrisoner # Delta-V
+      - id: ClothingShoesBootsWinterWarden #Delta V: Add departmental winter boots
+      - id: BoxEncryptionKeyPrisoner #Delta-V
+      - id: LunchboxSecurityFilledRandom # Delta-v Lunchboxes!
+        prob: 0.3
 
 - type: entity
   id: LockerWardenFilled
@@ -35,8 +36,6 @@
       - id: FlashlightSeclite
       - id: WeaponDisabler
         prob: 0.3
-      - id: ClothingHeadHatWarden
-      - id: ClothingHeadHatBeretWarden
       - id: ClothingBeltSecurityFilled
       - id: Flash
       - id: ClothingEyesGlassesSecurity
@@ -48,8 +47,11 @@
       - id: RubberStampWarden
       - id: DoorRemoteArmory
       - id: HoloprojectorSecurity
-      - id: ClothingEyesHudSecurity
       - id: BoxPDAPrisoner # Delta-V
+      - id: ClothingShoesBootsWinterWarden #Delta V: Add departmental winter boots
+      - id: BoxEncryptionKeyPrisoner #Delta-V
+      - id: LunchboxSecurityFilledRandom # Delta-v Lunchboxes!
+        prob: 0.3
 
 - type: entity
   id: LockerSecurityFilled
@@ -90,7 +92,10 @@
       - id: ClothingShoesBootsJack
       - id: WeaponMeleeNeedle
         prob: 0.1
-      - id: ClothingEyesHudSecurity
+      - id: HoloprojectorSecurity
+        prob: 0.6
+      - id: LunchboxSecurityFilledRandom # Delta-v Lunchboxes!
+        prob: 0.3
 
 - type: entity
   id: LockerBrigmedicFilled
@@ -99,7 +104,7 @@
   components:
   - type: StorageFill
     contents:
-      - id: ClothingEyesHudSecurity
+      - id: ClothingEyesGlassesSecurity
       - id: WeaponDisabler
       - id: TrackingImplanter
         amount: 2
@@ -127,6 +132,8 @@
         prob: 0.7
 ##      - id: ClothingNeckCloakMoth #bzzz Moth-pocalypse # DeltaV - why
 ##        prob: 0.15
+      - id: LunchboxSecurityFilledRandom # Delta-v Lunchboxes!
+        prob: 0.3
 
 # DeltaV - adding corpsman locker w/ hardsuit
 
@@ -158,6 +165,8 @@
         prob: 0.3
       - id: MedkitBurnFilled
         prob: 0.7
+      - id: LunchboxSecurityFilledRandom # Delta-v Lunchboxes!
+        prob: 0.3
 
 # DeltaV - end addition
 
@@ -168,7 +177,7 @@
   components:
   - type: StorageFill
     contents:
-      - id: ClothingEyesHudSecurity
+      - id: ClothingEyesGlassesSecurity
         prob: 0.3
       - id: ClothingHeadHatFedoraBrown
       - id: ClothingNeckTieDet
@@ -176,9 +185,15 @@
       - id: ClothingOuterCoatDetective
       - id: FlashlightSeclite
       - id: ForensicScanner
+      - id: LogProbeCartridge
       - id: BoxForensicPad
       - id: DrinkDetFlask
       - id: ClothingHandsGlovesForensic
+      - id: RubberStampDetective
+      - id: HoloprojectorSecurity
+      - id: BoxEvidenceMarkers
+      - id: LunchboxSecurityFilledRandom # Delta-v Lunchboxes!
+        prob: 0.3
 
 - type: entity
   id: ClosetBombFilled
@@ -277,7 +292,7 @@
     contents:
     - id: WeaponSubMachineGunWt550
       amount: 2
-    - id: MagazinePistolSubMachineGun
+    - id: MagazinePistolSubMachineGunTopMounted
       amount: 4
 
 - type: entity

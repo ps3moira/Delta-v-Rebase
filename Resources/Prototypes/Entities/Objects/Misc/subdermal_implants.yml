@@ -118,14 +118,15 @@
         components:
         - Hands # no use giving a mouse a storage implant, but a monkey is another story...
     - type: Storage
-      capacity: 20 #10-20 should be more than enough for this
+      grid:
+      - 0,0,2,2
     - type: ContainerContainer
       containers:
         storagebase: !type:Container
           ents: [ ]
     - type: UserInterface
       interfaces:
-        - key: enum.StorageUiKey.Key
+        enum.StorageUiKey.Key:
           type: StorageBoundUserInterface
 
 - type: entity
@@ -142,7 +143,7 @@
         - Cuffable # useless if you cant be cuffed
 
 - type: entity
-  parent: BaseSubdermalImplant
+  parent: [ BaseSubdermalImplant, StorePresetUplink ]
   id: UplinkImplant
   name: uplink implant
   description: This implant lets the user access a hidden Syndicate uplink at will.
@@ -154,13 +155,12 @@
       components:
       - Hands # prevent mouse buying grenade penguin since its not telepathic
   - type: Store
-    preset: StorePresetUplink
     balance:
       Telecrystal: 0
   - type: UserInterface
     interfaces:
-    - key: enum.StoreUiKey.Key
-      type: StoreBoundUserInterface
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
 
 - type: entity
   parent: BaseSubdermalImplant
@@ -176,6 +176,18 @@
       range: 1.75
       energyConsumption: 50000
       disableDuration: 10
+
+- type: entity
+  parent: BaseSubdermalImplant
+  id: ScramImplant
+  name: scram implant
+  description: This implant randomly teleports the user within a large radius when activated.
+  noSpawn: true
+  components:
+    - type: SubdermalImplant
+      implantAction: ActionActivateScramImplant
+    - type: TriggerImplantAction
+    - type: ScramImplant
 
 - type: entity
   parent: BaseSubdermalImplant
@@ -196,7 +208,7 @@
   parent: BaseSubdermalImplant
   id: MicroBombImplant
   name: micro-bomb implant
-  description: This implant detonates the user upon death.
+  description: This implant detonates the user upon activation or upon death.
   noSpawn: true
   components:
     - type: SubdermalImplant
@@ -238,9 +250,10 @@
     - type: OnUseTimerTrigger
       delay: 7
       initialBeepDelay: 0
-      beepSound: /Audio/Machines/Nuke/general_beep.ogg
-      params:
-        volume: -2
+      beepSound:
+        path: /Audio/Machines/Nuke/general_beep.ogg
+        params:
+          volume: -2
     - type: ExplodeOnTrigger
     - type: GibOnTrigger
       deleteItems: true
@@ -272,6 +285,8 @@
   - type: TriggerImplantAction
   - type: GibOnTrigger
     deleteItems: true
+  - type: SpawnOnTrigger
+    proto: Acidifier
   - type: Tag
     tags:
     - SubdermalImplant
@@ -301,12 +316,12 @@
 - type: entity
   parent: BaseSubdermalImplant
   id: MindShieldImplant
-  name: mind-shield implant
+  name: mindshield implant
   description: This implant will ensure loyalty to Nanotrasen and prevent mind control devices.
   noSpawn: true
   components:
    - type: SubdermalImplant
-     #permanent: true # DeltaV - Temporarily allow them to be removed until a special item for this is created
+     permanent: true
    - type: Tag
      tags:
        - MindShield
